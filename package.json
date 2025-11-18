@@ -4,6 +4,6 @@
   "description": "FPT.AI & Edge TTS on Vercel",
   "dependencies": {
     "node-fetch": "^2.7.0",
-    "msedge-tts": "^0.0.4"
+    "msedge-tts": "latest"
   }
 }
