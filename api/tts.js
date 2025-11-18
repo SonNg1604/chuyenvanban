@@ -22,21 +22,24 @@ module.exports = async (req, res) => {
 
         let audioBuffer;
 
-        // --- TRƯỜNG HỢP 1: MICROSOFT EDGE (Miễn phí 100%) ---
+        // --- TRƯỜNG HỢP 1: MICROSOFT EDGE (SỬA LỖI STREAM) ---
         if (voice.includes('Neural')) {
             console.log(`Đang gọi Microsoft Edge TTS (${voice})...`);
             const tts = new MsEdgeTTS();
             await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+            
             const readable = await tts.toStream(text);
             
-            const chunks = [];
-            for await (const chunk of readable) {
-                chunks.push(chunk);
-            }
-            audioBuffer = Buffer.concat(chunks);
+            // SỬA LỖI: Dùng Promise để đọc stream thay vì for-await
+            audioBuffer = await new Promise((resolve, reject) => {
+                const chunks = [];
+                readable.on('data', (chunk) => chunks.push(chunk));
+                readable.on('end', () => resolve(Buffer.concat(chunks)));
+                readable.on('error', (err) => reject(err));
+            });
         }
         
-        // --- TRƯỜNG HỢP 2: GIỌNG FPT.AI (Cần Key) ---
+        // --- TRƯỜNG HỢP 2: GIỌNG FPT.AI ---
         else {
             if (!FPT_API_KEY) {
                 return res.status(500).json({ error: 'Chưa thiết lập FPT API Key trên Vercel!' });
@@ -44,7 +47,6 @@ module.exports = async (req, res) => {
             
             console.log(`Đang gọi FPT.AI (${voice})...`);
             
-            // B1: Gửi yêu cầu lấy Link
             const response = await fetch(FPT_API_URL, {
                 method: 'POST',
                 headers: { 
@@ -61,7 +63,6 @@ module.exports = async (req, res) => {
                 throw new Error(data.message || 'Lỗi từ FPT.AI (Không lấy được link)'); 
             }
 
-            // B2: Máy chủ tự tải file MP3 về (Fix lỗi CORS/404)
             console.log(`Link FPT ok, đang tải về server...`);
             const audioResponse = await fetch(data.async);
             if (!audioResponse.ok) {
@@ -70,7 +71,7 @@ module.exports = async (req, res) => {
             audioBuffer = await audioResponse.buffer();
         }
 
-        // Gửi file MP3 thô về cho trình duyệt
+        // Gửi file về client
         console.log("Đã xong, gửi file về client.");
         res.setHeader('Content-Type', 'audio/mpeg');
         res.status(200).send(audioBuffer);
