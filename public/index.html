@@ -67,7 +67,44 @@
             /* Hiệu ứng bóng đổ vàng nhẹ tạo chiều sâu */
             filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));
         }
+#splash-screen p {
+            margin-top: 15px; /* Tăng khoảng cách với tiêu đề */
+            margin-bottom: 40px;
+            font-size: 1.3em; /* TĂNG KÍCH THƯỚC CHỮ TÁC GIẢ */
+            font-weight: 600; /* Chữ đậm hơn */
+            opacity: 1; /* Không làm mờ nữa */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
 
+        /* Tên tác giả "Đỗ Nhật Quang" */
+        #author-name {
+            color: #fff; /* Màu trắng để tạo điểm nhấn khác biệt */
+            font-weight: 700; /* Rất đậm */
+            font-size: 1.1em; /* Lớn hơn chữ "Tác giả:" một chút */
+            text-transform: uppercase; /* Viết hoa toàn bộ */
+        }
+
+        /* Nút Bắt đầu */
+        #start-button {
+            padding: 14px 50px; /* Nút to hơn */
+            border: 2px solid #FFD700; /* Viền vàng */
+            border-radius: 30px;
+            background-color: transparent; /* Nền trong suốt */
+            color: #FFD700; /* Chữ vàng */
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        #start-button:hover {
+            background-color: #FFD700; /* Hover thì nền vàng */
+            color: #2c3e50; /* Chữ chuyển màu tối */
+            transform: translateY(-3px); /* Hiệu ứng nổi lên */
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
         #splash-screen h1 {
             font-size: 2em; /* Tăng kích thước tiêu đề chính */
             font-weight: 800; /* Chữ đậm hơn */
@@ -364,4 +401,5 @@
 </body>
 
 </html>
+
 
