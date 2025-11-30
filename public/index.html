@@ -42,36 +42,39 @@
         }
 
         /* Màn hình chào (Splash Screen) */
-       #splash-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    
-    /* --- CẬP NHẬT NỀN HỌA TIẾT RẰN RI --- */
-    background-image: url('/camo-bg.jpg'); /* Đường dẫn đến file ảnh bạn vừa tải lên */
-    background-repeat: repeat; /* Lặp lại hình ảnh để phủ kín màn hình */
-    background-size: 300px; /* Kích thước của mỗi ô họa tiết. Bạn có thể điều chỉnh số này cho vừa mắt */
-    background-position: center;
-    /* ------------------------------------ */
-    
-    display: flex; justify-content: center; align-items: center;
-    z-index: 1000; opacity: 1; transition: opacity 0.5s ease-out;
-    color: white; flex-direction: column; text-align: center;
-        /* Logo thuyết minh ở màn hình chào */
-       .splash-logo { 
-    width: 140px; /* Tăng lên 140px */
-    height: 140px; /* Tăng lên 140px */
-    border-radius: 15px; margin-bottom: 20px; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-}
-        #splash-screen h1 { 
-            font-size: 1.8em; font-weight: 700; margin: 10px 0; text-transform: uppercase; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+     #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            /* Nền họa tiết rằn ri */
+            background-image: url('/camo-bg.jpg');
+            background-repeat: repeat;
+            background-size: 300px;
+            background-position: center;
+            /* Lớp phủ màu tối để làm nổi bật chữ */
+            background-color: rgba(0, 0, 0, 0.5); 
+            background-blend-mode: multiply;
+
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 1; transition: opacity 0.5s ease-out;
+            color: #FFD700; /* ĐỔI MÀU CHỮ: Vàng ánh kim (Gold) */
+            flex-direction: column; text-align: center;
         }
-        #splash-screen p { margin-bottom: 40px; font-size: 1em; opacity: 0.9; }
-        #start-button {
-            padding: 12px 40px; border: none; border-radius: 25px;
-            background-color: white; color: #2c3e50;
-            font-size: 1.1em; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
+        /* Logo thuyết minh ở màn hình chào */
+       .splash-logo {
+            width: 130px; /* Chiều rộng */
+            height: 150px; /* TĂNG CHIỀU CAO: Logo trông cao và thanh thoát hơn */
+            /* border-radius: 15px; <-- Bỏ bo góc để logo trông sắc nét, mạnh mẽ */
+            margin-bottom: 25px;
+            /* Hiệu ứng bóng đổ vàng nhẹ tạo chiều sâu */
+            filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));
+        }
+
+        #splash-screen h1 {
+            font-size: 2em; /* Tăng kích thước tiêu đề chính */
+            font-weight: 800; /* Chữ đậm hơn */
+            margin: 10px 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Bóng đổ chữ mạnh hơn */
+            letter-spacing: 1px; /* Tăng khoảng cách chữ */
         }
         #start-button:hover { transform: scale(1.05); }
 
@@ -361,3 +364,4 @@
 </body>
 
 </html>
+
