@@ -42,13 +42,19 @@
         }
 
         /* Màn hình chào (Splash Screen) */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #4ca1af, #2c3e50); /* Gradient xanh đẹp */
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 1; transition: opacity 0.5s ease-out;
-            color: white; flex-direction: column; text-align: center;
-        }
+       #splash-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    
+    /* --- CẬP NHẬT NỀN HỌA TIẾT RẰN RI --- */
+    background-image: url('/camo-bg.jpg'); /* Đường dẫn đến file ảnh bạn vừa tải lên */
+    background-repeat: repeat; /* Lặp lại hình ảnh để phủ kín màn hình */
+    background-size: 300px; /* Kích thước của mỗi ô họa tiết. Bạn có thể điều chỉnh số này cho vừa mắt */
+    background-position: center;
+    /* ------------------------------------ */
+    
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; opacity: 1; transition: opacity 0.5s ease-out;
+    color: white; flex-direction: column; text-align: center;
         /* Logo thuyết minh ở màn hình chào */
        .splash-logo { 
     width: 140px; /* Tăng lên 140px */
@@ -353,4 +359,5 @@
 </script>
 
 </body>
+
 </html>
