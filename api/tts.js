@@ -47,7 +47,35 @@ module.exports = async (req, res) => {
             // Xóa file tạm để dọn dẹp
             await unlink(tempFilePath).catch(() => {}); 
         }
-        
+        // --- 2. HUGGING FACE (MỚI - Facebook MMS) ---
+        else if (voice === 'hf-facebook') {
+            console.log("Đang gọi HuggingFace (Facebook MMS)...");
+            if (!HF_TOKEN) return res.status(500).json({ error: 'Chưa có HF_TOKEN!' });
+
+            // Gọi API của Hugging Face
+            const response = await fetch(
+                "https://api-inference.huggingface.co/models/facebook/mms-tts-vie",
+                {
+                    headers: { 
+                        Authorization: `Bearer ${HF_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ inputs: text }),
+                }
+            );
+
+            if (!response.ok) {
+                const err = await response.json();
+                // Hugging Face hay báo lỗi "Model is loading", ta báo người dùng chờ
+                if (err.error && err.error.includes("loading")) {
+                    throw new Error("AI đang khởi động (vui lòng thử lại sau 20s)...");
+                }
+                throw new Error("Lỗi HF: " + JSON.stringify(err));
+            }
+            
+            audioBuffer = await response.buffer();
+        }
         // --- TRƯỜNG HỢP 2: GIỌNG FPT.AI (Cần Key) ---
         else {
             if (!FPT_API_KEY) {
@@ -89,4 +117,5 @@ module.exports = async (req, res) => {
         console.error("Lỗi Server:", error.message);
         res.status(500).json({ error: error.message });
     }
+
 };
