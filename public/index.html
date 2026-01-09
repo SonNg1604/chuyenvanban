@@ -3,146 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTS Quân đội nhân dân Việt nam</title>
+    <title>TTS Quân đội nhân dân Việt Nam (Cyberpunk)</title>
     
     <link rel="icon" type="image/png" href="/favicon.png"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.0/mammoth.browser.min.js"></script>
 
     <style>
-        /* --- CẤU HÌNH GIAO DIỆN --- */
+        /* --- 1. CẤU HÌNH CHUNG --- */
         body {
-            font-family: 'Inter', sans-serif; margin: 0; display: flex;
+            font-family: 'Orbitron', sans-serif; /* Font chữ kiểu tương lai */
+            margin: 0; display: flex;
             justify-content: center; align-items: center; min-height: 100vh;
-            color: #333; overflow-x: hidden; 
-            background-color: #e0f2f7; /* Nền xanh nhạt */
+            color: #00f7ff; /* Màu chữ xanh neon chủ đạo */
+            overflow-x: hidden; 
+            background-color: #000; /* Nền đen */
             position: relative;
         }
         
-        /* Họa tiết Trống Đồng (Chìm, Lớn, Giữa) */
-        .trong-dong-bg {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); 
-            width: 80vw; height: 80vw; 
-            max-width: 900px; max-height: 900px;
-            background-image: url('/trong_dong.png'); /* Cần upload ảnh này */
-            background-repeat: no-repeat; background-size: contain; 
-            background-position: center; opacity: 0.15; /* Độ mờ 15% */
-            z-index: 1; pointer-events: none; 
+        /* --- 2. HÌNH NỀN ĐỘNG CYBERPUNK --- */
+        .cyberpunk-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden;
         }
 
+        .bg-image {
+            width: 100%; height: 100%;
+            object-fit: cover; /* Đảm bảo ảnh phủ kín màn hình */
+            position: absolute; top: 0; left: 0;
+            opacity: 0.8; /* Làm ảnh hơi tối để làm nền */
+        }
+
+        /* Lớp phủ tạo hiệu ứng tia sáng chạy (Scanlines) */
+        .scanlines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 247, 255, 0) 50%,
+                rgba(0, 247, 255, 0.05) 50%
+            );
+            background-size: 100% 4px; /* Kích thước dòng kẻ ngang */
+            z-index: 2;
+            pointer-events: none; /* Không chặn click chuột */
+        }
+
+        /* Hiệu ứng vệt sáng chạy ngang (Glitch Line) */
+        .glitch-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, transparent, #00f7ff, transparent);
+            opacity: 0.7;
+            z-index: 3;
+            animation: glitch-anim 5s infinite linear;
+            box-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+        }
+
+        @keyframes glitch-anim {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 0.7; }
+            50% { opacity: 0.7; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        /* Lớp phủ màu tạo không khí Cyberpunk */
+        .color-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+            mix-blend-mode: overlay; /* Hòa trộn màu */
+            z-index: 4;
+            pointer-events: none;
+        }
+
+
+        /* --- 3. GIAO DIỆN CHÍNH (Đã chỉnh lại màu cho hợp style) --- */
         /* Logo Quân Đội (Góc trái trên cùng) */
         .logo-quan-doi-goc {
             position: fixed; top: 20px; left: 20px;
-            width: 70px; height: auto; z-index: 100; 
-            opacity: 0.9; filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
-            display: none; /* Ẩn lúc đầu, hiện sau khi vào app */
+            width: 65px; height: auto; z-index: 100; 
+            filter: drop-shadow(0 0 5px #00f7ff); /* Bóng neon */
+            display: block; /* Hiện luôn */
         }
-
-        /* Màn hình chào (Splash Screen) */
-     #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* Nền họa tiết rằn ri */
-            background-image: url('/camo-bg.jpg');
-            background-repeat: repeat;
-            background-size: 300px;
-            background-position: center;
-            /* Lớp phủ màu tối để làm nổi bật chữ */
-            background-color: rgba(0, 0, 0, 0.5); 
-            background-blend-mode: multiply;
-
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 1; transition: opacity 0.5s ease-out;
-            color: #FFD700; /* ĐỔI MÀU CHỮ: Vàng ánh kim (Gold) */
-            flex-direction: column; text-align: center;
-        }
-        /* Logo thuyết minh ở màn hình chào */
-       .splash-logo {
-            width: 130px; /* Chiều rộng */
-            height: 150px; /* TĂNG CHIỀU CAO: Logo trông cao và thanh thoát hơn */
-            /* border-radius: 15px; <-- Bỏ bo góc để logo trông sắc nét, mạnh mẽ */
-            margin-bottom: 25px;
-            /* Hiệu ứng bóng đổ vàng nhẹ tạo chiều sâu */
-            filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));
-        }
-#splash-screen p {
-            margin-top: 15px; /* Tăng khoảng cách với tiêu đề */
-            margin-bottom: 40px;
-            font-size: 1.3em; /* TĂNG KÍCH THƯỚC CHỮ TÁC GIẢ */
-            font-weight: 600; /* Chữ đậm hơn */
-            opacity: 1; /* Không làm mờ nữa */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        /* Tên tác giả "Đỗ Nhật Quang" */
-        #author-name {
-            color: #fff; /* Màu trắng để tạo điểm nhấn khác biệt */
-            font-weight: 700; /* Rất đậm */
-            font-size: 1.1em; /* Lớn hơn chữ "Tác giả:" một chút */
-            text-transform: uppercase; /* Viết hoa toàn bộ */
-        }
-
-        /* Nút Bắt đầu */
-        #start-button {
-            padding: 14px 50px; /* Nút to hơn */
-            border: 2px solid #FFD700; /* Viền vàng */
-            border-radius: 30px;
-            background-color: transparent; /* Nền trong suốt */
-            color: #FFD700; /* Chữ vàng */
-            font-size: 1.2em;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-
-        #start-button:hover {
-            background-color: #FFD700; /* Hover thì nền vàng */
-            color: #2c3e50; /* Chữ chuyển màu tối */
-            transform: translateY(-3px); /* Hiệu ứng nổi lên */
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-        }
-        #splash-screen h1 {
-            font-size: 2em; /* Tăng kích thước tiêu đề chính */
-            font-weight: 800; /* Chữ đậm hơn */
-            margin: 10px 0;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* Bóng đổ chữ mạnh hơn */
-            letter-spacing: 1px; /* Tăng khoảng cách chữ */
-        }
-        #start-button:hover { transform: scale(1.05); }
-
-        #main-app { display: none; }
 
         /* Khung ứng dụng chính */
         .container {
-            background-color: rgba(255, 255, 255, 0.95); 
+            background-color: rgba(0, 20, 40, 0.85); /* Nền tối trong suốt */
             padding: 25px; border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3), inset 0 0 20px rgba(0, 247, 255, 0.1); /* Bóng neon trong ngoài */
             width: 90%; max-width: 550px;
             position: relative; z-index: 10;
-            border: 1px solid rgba(0, 123, 255, 0.2);
-            backdrop-filter: blur(5px); 
+            border: 2px solid #00f7ff; /* Viền neon */
+            backdrop-filter: blur(10px); 
         }
         h2 {
-            text-align: center; color: #0056b3; 
+            text-align: center; color: #00f7ff; /* Chữ neon */
             margin-top: 0; margin-bottom: 20px;
-            font-size: 1.6em; font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            font-size: 1.8em; font-weight: 800;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.7);
+            letter-spacing: 2px;
         }
 
         /* Tab Button */
-        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 2px solid #005577; }
         .tab-button {
             flex: 1; padding: 12px 10px; border: none;
             background-color: transparent; cursor: pointer;
-            font-size: 16px; font-weight: 500; color: #666;
-            border-bottom: 3px solid transparent; transition: all 0.2s;
+            font-size: 16px; font-weight: 600; color: #005577;
+            border-bottom: 3px solid transparent; transition: all 0.3s;
+            text-transform: uppercase;
         }
-        .tab-button.active { color: #007bff; border-bottom-color: #007bff; font-weight: 600; }
+        .tab-button.active { 
+            color: #00f7ff; border-bottom-color: #00f7ff; 
+            text-shadow: 0 0 5px #00f7ff;
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
@@ -151,128 +127,162 @@
         #file-input { display: none; }
         .file-label {
             display: block; padding: 20px;
-            border: 2px dashed #007bff; border-radius: 10px;
-            background-color: #f8f9fa; cursor: pointer;
-            font-size: 16px; color: #007bff;
-            font-weight: 500; transition: background-color 0.2s;
+            border: 2px dashed #00f7ff; border-radius: 10px;
+            background-color: rgba(0, 247, 255, 0.1); cursor: pointer;
+            font-size: 16px; color: #00f7ff;
+            font-weight: 600; transition: all 0.3s;
         }
-        .file-label:hover { background-color: #e9f5ff; }
-        #file-name { margin-top: 15px; font-size: 14px; color: #555; font-style: italic; }
+        .file-label:hover { 
+            background-color: rgba(0, 247, 255, 0.2); 
+            box-shadow: 0 0 10px #00f7ff;
+        }
+        #file-name { margin-top: 15px; font-size: 14px; color: #aaa; font-style: italic; }
 
         /* Form Controls */
         textarea {
             width: 100%; height: 140px; padding: 12px; 
-            border: 1px solid #cceeff; border-radius: 10px; 
+            border: 2px solid #005577; border-radius: 10px; 
             font-size: 16px; box-sizing: border-box; margin-bottom: 18px;
-            resize: vertical; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
-            transition: border-color 0.3s;
+            resize: vertical; 
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #00f7ff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Orbitron', sans-serif;
         }
-        textarea:focus { border-color: #007bff; outline: none; }
+        textarea:focus { 
+            border-color: #00f7ff; outline: none; 
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
         
         .control-group { margin-bottom: 18px; }
-        label { display: flex; justify-content: space-between; font-weight: 500; font-size: 15px; margin-bottom: 8px; color: #004d40; }
+        label { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; margin-bottom: 8px; color: #00f7ff; text-transform: uppercase; letter-spacing: 1px; }
         
         select {
             width: 100%; padding: 12px; border-radius: 10px; 
-            border: 1px solid #cceeff; font-size: 16px; 
-            background-color: #f8fcff; outline: none;
+            border: 2px solid #005577; font-size: 16px; 
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #00f7ff; outline: none;
+            font-family: 'Orbitron', sans-serif;
         }
+        select:focus { border-color: #00f7ff; box-shadow: 0 0 10px rgba(0, 247, 255, 0.5); }
         
-        input[type="range"] { width: 100%; cursor: pointer; }
+        input[type="range"] { width: 100%; cursor: pointer; accent-color: #00f7ff; }
         
         #speak-btn {
-            width: 100%; padding: 14px; border: none; border-radius: 10px; 
-            cursor: pointer; font-weight: bold; font-size: 17px; 
-            transition: all 0.2s ease-in-out;
-            background-color: #007bff; color: white;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            width: 100%; padding: 14px; border: 2px solid #00f7ff; border-radius: 10px; 
+            cursor: pointer; font-weight: 800; font-size: 18px; 
+            transition: all 0.3s ease-in-out;
+            background-color: rgba(0, 247, 255, 0.2); color: #00f7ff;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
             display: flex; align-items: center; justify-content: center;
+            text-transform: uppercase; letter-spacing: 2px;
         }
-        #speak-btn:hover { background-color: #0056b3; transform: translateY(-2px); }
-        #speak-btn:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); }
+        #speak-btn:hover { 
+            background-color: #00f7ff; color: #000; 
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.8);
+            transform: scale(1.02);
+        }
+        #speak-btn:disabled { 
+            background-color: #333; border-color: #555; color: #777; 
+            cursor: not-allowed; transform: none; box-shadow: none;
+        }
         
-        .status { text-align: center; font-size: 14px; color: #666; margin-top: 18px; min-height: 1.2em; }
+        .status { text-align: center; font-size: 14px; color: #aaa; margin-top: 18px; min-height: 1.2em; }
         
-        audio { width: 100%; margin-top: 20px; }
+        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(180deg); /* Đổi màu trình phát cho hợp */ }
         
         .download-button {
             display: block; width: 100%; box-sizing: border-box; text-align: center;
-            padding: 12px; border: none; border-radius: 10px; 
+            padding: 12px; border: 2px solid #ff00ff; border-radius: 10px; /* Màu hồng neon */
             cursor: pointer; font-weight: bold; font-size: 16px; 
-            transition: all 0.2s; background-color: #28a745; 
-            color: white; text-decoration: none; margin-top: 10px;
+            transition: all 0.3s; background-color: rgba(255, 0, 255, 0.2); 
+            color: #ff00ff; text-decoration: none; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+             box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
         }
-        .download-button:hover { background-color: #218838; }
+        .download-button:hover { 
+            background-color: #ff00ff; color: #000;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
 
         @media (max-width: 600px) { 
             .logo-quan-doi-goc { top: 15px; left: 15px; width: 50px; } 
-            .container { padding: 20px; } 
-            h2 { font-size: 1.4em; } 
-            #splash-screen h1 { font-size: 1.5em; }
+            .container { padding: 20px; width: 95%; } 
+            h2 { font-size: 1.5em; } 
         }
     </style>
 </head>
 <body>
 
-<div class="trong-dong-bg"></div>
-<img src="/logo_quan_doi.png" alt="Logo Quân Đội" class="logo-quan-doi-goc" id="main-logo">
+<div class="cyberpunk-bg">
+    <img src="/image_36.png" alt="Cyberpunk Background" class="bg-image">
+    
+    <div class="scanlines"></div> <div class="glitch-line" style="animation-delay: 0s;"></div> <div class="glitch-line" style="animation-delay: 2.5s;"></div> <div class="color-overlay"></div> </div>
 
-<div id="splash-screen">
-    <img src="/logo_thuyet_minh.png" alt="Logo Thuyết Minh" class="splash-logo">
-    <h1>CHƯƠNG TRÌNH<br>HỖ TRỢ THUYẾT MINH</h1>
-    <p>Tác giả: <span id="author-name">Đỗ Nhật Quang</span></p> <button id="start-button">BẮT ĐẦU</button>
-</div>
+<img src="/logo_quan_doi.png" alt="Logo Quân Đội" class="logo-quan-doi-goc" id="main-logo">
 
 <div id="main-app">
     <div class="container">
-        <h2>Chuyển Văn Bản Thành Giọng Nói</h2>
+        <h2>CHUYỂN ĐỔI VĂN BẢN (TTS)</h2>
         
         <div class="tab-buttons">
             <button class="tab-button active" onclick="openTab(event, 'text-tab')">Nhập văn bản</button>
-            <button class="tab-button" onclick="openTab(event, 'upload-tab')">Tải file Word (.docx)</button>
+            <button class="tab-button" onclick="openTab(event, 'upload-tab')">Tải file Word</button>
         </div>
 
         <div id="text-tab" class="tab-content active">
-            <textarea id="text-input" placeholder="Nhập văn bản tiếng Việt...">Kính mời quý Thủ trưởng cùng các đồng chí nhập văn bản.</textarea>
+            <textarea id="text-input" placeholder="Nhập văn bản cần đọc tại đây...">Kính mời quý Thủ trưởng cùng các đồng chí nhập văn bản.</textarea>
         </div>
 
         <div id="upload-tab" class="tab-content">
-            <label for="file-input" class="file-label" id="file-label">Nhấn để chọn file .docx</label>
+            <label for="file-input" class="file-label" id="file-label">CHỌN FILE .DOCX</label>
             <input type="file" id="file-input" accept=".docx">
             <p id="file-name">Chưa chọn file nào.</p>
         </div>
         
-        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-
-        <div class="control-group">
-            <label for="voice-select">Chọn giọng đọc:</label>
+        <div class="control-group" style="margin-top: 20px;">
+            <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
             <select id="voice-select">
-                    <option value="banmai">👩 Nữ miền Bắc </option>
-                    <option value="leminh">👨 Nam miền Bắc </option>
-                    <option value="ngoclam">👩 Nữ miền Trung </option>
-                    <option value="giahuy">👨 Nam miền Trung </option>
-                <option value="hf-facebook"> Nam miền Nam </option>
+                <option value="google-vi">📢 Google (Miễn phí - Nhanh)</option>
+                
+                <optgroup label="FPT.AI - Giọng Nữ Miền Bắc">
+                    <option value="banmai" selected>👩 Ban Mai (Tiêu chuẩn)</option>
+                    <option value="thuminh">👩 Thu Minh (Cao cấp)</option>
+                </optgroup>
+                <optgroup label="FPT.AI - Giọng Nam Miền Bắc">
+                    <option value="leminh">👨 Lê Minh (Tiêu chuẩn)</option>
+                </optgroup>
+                <optgroup label="FPT.AI - Giọng Miền Nam">
+                    <option value="myan">👩 Mỹ An (Tiêu chuẩn)</option>
+                    <option value="lannhi">👩 Lan Nhi (Cao cấp)</option>
+                    <option value="linhsan">👩 Linh San (Cao cấp)</option>
+                    <option value="minhquang">👨 Minh Quang (Cao cấp)</option>
+                </optgroup>
+                <optgroup label="FPT.AI - Giọng Miền Trung">
+                    <option value="ngoclam">👩 Ngọc Lam (Huế - Cao cấp)</option>
+                    <option value="giahuy">👨 Gia Huy (Huế - Cao cấp)</option>
+                </optgroup>
             </select>
         </div>
 
         <div class="control-group">
-            <label for="speed-slider">Tốc độ đọc: <span id="speed-value">1.0x</span></label>
+            <label for="speed-slider">TỐC ĐỘ ĐỌC: <span id="speed-value">1.0x</span></label>
             <input type="range" id="speed-slider" min="0.5" max="1.5" value="1.0" step="0.1">
         </div>
 
-        <button id="speak-btn">🚀 Tạo giọng nói</button>
-        <p class="status" id="status-msg">Sẵn sàng...</p>
+        <button id="speak-btn">🚀 TẠO GIỌNG NÓI</button>
+        <p class="status" id="status-msg">Hệ thống sẵn sàng...</p>
         
         <audio id="audio-player" controls style="display: none;"></audio>
-        <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">Tải file .mp3</a>
+        <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">TẢI FILE .MP3</a>
     </div>
 </div>
 
 <script>
-    // 1. VARIABLES
-    const splash = document.getElementById('splash-screen');
+    // --- JS LOGIC (Giữ nguyên logic cũ, chỉ bỏ màn hình chào) ---
+    // const splash = document.getElementById('splash-screen'); // Bỏ
     const mainApp = document.getElementById('main-app');
-    const startButton = document.getElementById('start-button');
+    // const startButton = document.getElementById('start-button'); // Bỏ
     const mainLogo = document.getElementById('main-logo');
     
     const MY_SERVER_URL = '/api/tts'; 
@@ -290,18 +300,10 @@
 
     let currentBlobUrl = null; 
 
-    // 2. LOGIC MÀN HÌNH CHÀO
-    startButton.addEventListener('click', () => {
-        splash.style.opacity = '0'; 
-        setTimeout(() => { 
-            splash.style.display = 'none'; 
-            mainApp.style.display = 'block'; 
-            mainLogo.style.display = 'block'; // Hiện logo quân đội
-            document.body.style.overflow = 'auto'; 
-        }, 500); 
-    });
+    // Hiển thị ngay màn hình chính
+    mainApp.style.display = 'block';
+    // mainLogo.style.display = 'block'; // Đã set trong CSS là display: block rồi
 
-    // 3. CÁC LOGIC KHÁC (TAB, UPLOAD, SLIDER)
     speedSlider.addEventListener('input', () => {
         speedValue.textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
     });
@@ -314,7 +316,7 @@
         if (tabName === 'text-tab') {
             fileInput.value = null; 
             fileNameDisplay.textContent = "Chưa chọn file nào.";
-            fileLabel.textContent = "Nhấn để chọn file .docx";
+            fileLabel.textContent = "CHỌN FILE .DOCX";
         }
     };
 
@@ -332,18 +334,17 @@
                 .then(result => { 
                     textInput.value = result.value; 
                     statusMsg.textContent = "Đã trích xuất văn bản."; 
-                    fileLabel.textContent = "Chọn file khác"; 
+                    fileLabel.textContent = "CHỌN FILE KHÁC"; 
                 })
                 .catch(err => { 
                     console.error(err); 
                     statusMsg.textContent = "Lỗi đọc file."; 
-                    fileLabel.textContent = "Thử lại"; 
+                    fileLabel.textContent = "THỬ LẠI"; 
                 });
         };
         reader.readAsArrayBuffer(file);
     });
 
-    // 4. SPEAK LOGIC (GỬI LÊN SERVER VERCEL)
     async function speakWithApi() {
         const text = textInput.value;
         const voiceId = voiceSelect.value;
@@ -352,7 +353,7 @@
         if (!text) { statusMsg.textContent = "Lỗi: Văn bản rỗng."; return; }
 
         speakBtn.disabled = true;
-        statusMsg.textContent = "Đang xử lý... (Vui lòng chờ)";
+        statusMsg.textContent = "Đang xử lý dữ liệu... (Vui lòng chờ)";
         
         audioPlayer.style.display = "none";
         downloadBtn.style.display = "none";
@@ -367,15 +368,11 @@
             });
 
             if (!response.ok) {
-                try { 
-                    const errData = await response.json(); 
-                    throw new Error(errData.error || `Lỗi API: ${response.statusText}`); 
-                } catch (jsonError) { 
-                    throw new Error(`Lỗi API: ${response.status} ${response.statusText}`); 
-                }
+                try { const errData = await response.json(); throw new Error(errData.error || `Lỗi API: ${response.statusText}`); } 
+                catch (jsonError) { throw new Error(`Lỗi API: ${response.status} ${response.statusText}`); }
             }
 
-            statusMsg.textContent = "Thành công! Đang tải về...";
+            statusMsg.textContent = "Thành công! Đang truyền dữ liệu về...";
             const audioBlob = await response.blob();
             currentBlobUrl = URL.createObjectURL(audioBlob);
 
@@ -386,11 +383,11 @@
             downloadBtn.href = currentBlobUrl; 
             downloadBtn.style.display = "block"; 
 
-            statusMsg.textContent = "Đã xong.";
+            statusMsg.textContent = "Hoàn tất tác vụ.";
 
         } catch (error) {
             console.error(error);
-            statusMsg.textContent = "Lỗi: " + error.message;
+            statusMsg.textContent = "Lỗi hệ thống: " + error.message;
         } finally {
             speakBtn.disabled = false;
         }
@@ -399,9 +396,4 @@
 </script>
 
 </body>
-
 </html>
-
-
-
-
