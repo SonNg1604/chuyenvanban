@@ -7,14 +7,15 @@
     
     <link rel="icon" type="image/png" href="/favicon.png"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.0/mammoth.browser.min.js"></script>
 
     <style>
         /* --- 1. CẤU HÌNH CHUNG --- */
         body {
-            font-family: 'Orbitron', sans-serif; /* Font Cyberpunk */
+            /* FONT MỚI: Vuông vức, đậm chất kỹ thuật quân sự */
+            font-family: 'Chakra Petch', sans-serif; 
             margin: 0; display: flex;
             justify-content: center; align-items: center; min-height: 100vh;
             color: #00f7ff; /* Màu Neon Blue chủ đạo */
@@ -27,10 +28,9 @@
         .cyberpunk-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden;
-            background-color: #050510; /* Nền tối */
+            background-color: #050510; 
         }
 
-        /* Bạn nhớ upload ảnh nền tối/công nghệ tên là 'image_36.png' nhé */
         .bg-image {
             width: 100%; height: 100%;
             object-fit: cover;
@@ -38,7 +38,6 @@
             opacity: 0.6;
         }
 
-        /* Hiệu ứng quét ngang (Scanlines) */
         .scanlines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(0,247,255,0) 50%, rgba(0,247,255,0.02) 50%);
@@ -46,7 +45,6 @@
             z-index: 1; pointer-events: none;
         }
 
-        /* Hiệu ứng tia sáng chạy (Glitch Lines) */
         .glitch-line {
             position: absolute; left: 0; width: 100%; height: 2px;
             background: linear-gradient(to right, transparent, #00f7ff, #ff00ff, transparent);
@@ -63,7 +61,6 @@
             100% { top: 110%; opacity: 0; }
         }
 
-        /* Lớp phủ mờ tạo không khí */
         .vignette {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, transparent 40%, #000 100%);
@@ -76,13 +73,12 @@
             display: flex; justify-content: center; align-items: center;
             flex-direction: column; text-align: center;
             z-index: 1000; opacity: 1; transition: opacity 0.8s ease-out;
-            /* Không đặt nền màu ở đây để nhìn xuyên thấu xuống background động */
-            backdrop-filter: blur(3px); /* Làm mờ nhẹ nền đằng sau */
+            backdrop-filter: blur(3px); 
         }
 
         .splash-logo {
             width: 140px; height: 140px; margin-bottom: 30px;
-            filter: drop-shadow(0 0 15px #00f7ff); /* Logo phát sáng neon */
+            filter: drop-shadow(0 0 15px #00f7ff); 
             animation: pulse-logo 2s infinite ease-in-out;
         }
         @keyframes pulse-logo {
@@ -92,30 +88,29 @@
         }
 
         #splash-screen h1 {
-            font-size: 2.5em; font-weight: 800; margin: 10px 0;
-            text-transform: uppercase; letter-spacing: 3px;
+            font-size: 2.5em; font-weight: 700; margin: 10px 0;
+            text-transform: uppercase; letter-spacing: 2px;
             color: #fff;
-            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; /* Chữ phát sáng */
+            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; 
         }
 
         #splash-screen p {
             font-size: 1.2em; color: #aaa; margin-bottom: 50px; letter-spacing: 1px;
         }
-        #author-name { color: #ff00ff; font-weight: 700; text-shadow: 0 0 5px #ff00ff; } /* Tên tác giả màu hồng neon */
+        #author-name { color: #ff00ff; font-weight: 700; text-shadow: 0 0 5px #ff00ff; } 
 
-        /* Nút Bắt Đầu kiểu Cyberpunk */
         #start-button {
             padding: 15px 60px; 
             border: 2px solid #00f7ff; 
             background: rgba(0, 247, 255, 0.1);
             color: #00f7ff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5em; font-weight: 800; 
+            font-family: 'Chakra Petch', sans-serif; /* Font mới */
+            font-size: 1.5em; font-weight: 700; 
             cursor: pointer; position: relative; overflow: hidden;
             transition: 0.3s;
             text-transform: uppercase; letter-spacing: 2px;
             box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); /* Cắt góc nút */
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); 
         }
         #start-button:hover {
             background: #00f7ff; color: #000;
@@ -123,16 +118,16 @@
         }
 
         /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) --- */
-        #main-app { display: none; width: 100%; display: flex; justify-content: center; } /* Flex để căn giữa container */
+        #main-app { display: none; width: 100%; display: flex; justify-content: center; } 
         
         .logo-quan-doi-goc {
             position: fixed; top: 20px; left: 20px; width: 60px; height: auto; z-index: 100;
-            filter: drop-shadow(0 0 5px #00f7ff); display: none; /* Ẩn lúc đầu */
+            filter: drop-shadow(0 0 5px #00f7ff); display: none; 
         }
 
         .container {
-            background-color: rgba(10, 20, 30, 0.85); /* Nền tối kính */
-            padding: 30px; border-radius: 5px; /* Bo ít thôi cho cứng cáp */
+            background-color: rgba(10, 20, 30, 0.85); 
+            padding: 30px; border-radius: 5px; 
             width: 90%; max-width: 600px;
             border: 1px solid #00f7ff;
             box-shadow: 0 0 20px rgba(0, 247, 255, 0.1), inset 0 0 20px rgba(0, 247, 255, 0.05);
@@ -146,7 +141,7 @@
         .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 2px solid #333; }
         .tab-button {
             flex: 1; padding: 12px; background: transparent; border: none;
-            color: #555; font-family: 'Orbitron', sans-serif; font-weight: 700;
+            color: #555; font-family: 'Chakra Petch', sans-serif; font-weight: 700;
             cursor: pointer; transition: 0.3s;
         }
         .tab-button.active { color: #00f7ff; border-bottom: 2px solid #00f7ff; text-shadow: 0 0 5px #00f7ff; }
@@ -157,7 +152,8 @@
         textarea {
             width: 100%; height: 150px; padding: 15px; 
             background: rgba(0,0,0,0.6); border: 1px solid #333; color: #00f7ff;
-            font-family: 'Orbitron', sans-serif; resize: vertical; box-sizing: border-box;
+            font-family: 'Chakra Petch', sans-serif; resize: vertical; box-sizing: border-box;
+            font-size: 16px;
         }
         textarea:focus { outline: none; border-color: #00f7ff; box-shadow: 0 0 10px rgba(0,247,255,0.3); }
 
@@ -174,14 +170,16 @@
         
         select {
             width: 100%; padding: 12px; background: #050510; border: 1px solid #333;
-            color: #00f7ff; font-family: 'Orbitron', sans-serif; outline: none;
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none;
+            font-size: 16px;
         }
+        select:focus { border-color: #00f7ff; box-shadow: 0 0 10px rgba(0, 247, 255, 0.5); }
         
         input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; }
 
         #speak-btn {
             width: 100%; padding: 15px; border: none; background: #00f7ff;
-            color: #000; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.2em;
+            color: #000; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.2em;
             cursor: pointer; clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
             transition: 0.3s; box-shadow: 0 0 20px rgba(0,247,255,0.5);
         }
