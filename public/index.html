@@ -62,13 +62,13 @@
             z-index: 3; pointer-events: none;
         }
 
-        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) --- */
+        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) - ĐÃ SỬA LỖI MỜ --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             flex-direction: column; text-align: center;
             z-index: 1000; opacity: 1; transition: opacity 0.8s ease-out;
-            backdrop-filter: blur(5px); 
+            /* ĐÃ XÓA backdrop-filter: blur(5px); để không bị mờ hình nền */
         }
 
         .splash-logo {
@@ -100,120 +100,120 @@
         }
         #start-button:hover { background: #00f7ff; color: #000; box-shadow: 0 0 40px #00f7ff; }
 
-        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - ĐÃ PHÓNG TO --- */
-        #main-app { display: none; width: 100%; display: flex; justify-content: center; } 
+        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - CẤU TRÚC MỚI --- */
+        #main-app { display: none; width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; } 
         
         .logo-quan-doi-goc {
             position: fixed; top: 20px; left: 20px; width: 70px; height: auto; z-index: 100;
             filter: drop-shadow(0 0 5px #00f7ff); display: none; 
         }
 
-        /* --- CONTAINER KHỔNG LỒ --- */
-        .container {
-            background-image: url('/hud-frame.png'); 
-            background-size: 100% 100%; 
+        /* --- LỚP VỎ NGOÀI CHỨA ẢNH HUD LỚN --- */
+        .hud-wrapper {
+            background-image: url('/hud-frame.png');
+            background-size: 100% 100%;
             background-repeat: no-repeat;
-            background-color: transparent; 
+            background-position: center;
             
-            border: none; box-shadow: none;
+            width: 95%; /* Rộng gần hết màn hình */
+            max-width: 1200px; /* Giới hạn độ rộng tối đa */
+            min-height: 750px; /* Chiều cao tối thiểu để khung trông to */
             
-            /* THAY ĐỔI Ở ĐÂY: Kích thước lớn hơn */
-            width: 95%; /* Chiếm 95% màn hình */
-            max-width: 1400px; /* Giới hạn tối đa rất rộng */
-            min-height: 700px; /* Chiều cao tối thiểu lớn */
-            
-            /* Căn giữa và khoảng cách */
-            margin-top: 40px;
-            padding: 90px 110px; /* Padding lớn để nội dung lọt vào giữa khung to */
-            
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative; z-index: 10;
-            display: flex; flex-direction: column; justify-content: center; /* Căn nội dung giữa khung */
+            padding: 50px; /* Khoảng cách từ viền ảnh vào nội dung bên trong */
+            box-sizing: border-box;
         }
 
-        h2 { 
-            text-align: center; color: #00f7ff; margin-bottom: 30px; 
-            font-size: 2.2em; /* Chữ to hơn */
-            text-shadow: 0 0 15px rgba(0,247,255,0.6); 
-            text-transform: uppercase; letter-spacing: 3px;
+        /* --- CONTAINER NỘI DUNG BÊN TRONG (KÍCH THƯỚC CŨ) --- */
+        .container {
+            background-color: rgba(10, 20, 30, 0.85); /* Nền tối bán trong suốt */
+            padding: 30px; 
+            border-radius: 5px; 
+            width: 100%; 
+            max-width: 600px; /* Giới hạn kích thước nhỏ gọn như cũ */
+            border: 1px solid #00f7ff; /* Viền neon cho hộp nội dung */
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1), inset 0 0 20px rgba(0, 247, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
 
-        .tab-buttons { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 247, 255, 0.3); }
+        h2 { text-align: center; color: #00f7ff; margin-bottom: 25px; text-shadow: 0 0 10px rgba(0,247,255,0.5); }
+
+        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 247, 255, 0.3); }
         .tab-button {
-            flex: 1; padding: 15px; background: transparent; border: none;
+            flex: 1; padding: 12px; background: transparent; border: none;
             color: #555; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.1em;
             cursor: pointer; transition: 0.3s;
         }
-        .tab-button.active { color: #00f7ff; border-bottom: 3px solid #00f7ff; text-shadow: 0 0 8px #00f7ff; }
+        .tab-button.active { color: #00f7ff; border-bottom: 2px solid #00f7ff; text-shadow: 0 0 5px #00f7ff; }
         
         .tab-content { display: none; width: 100%; }
         .tab-content.active { display: block; }
 
         textarea {
-            width: 100%; 
-            height: 300px; /* Ô nhập liệu CAO hơn nhiều */
-            padding: 20px; 
+            width: 100%; height: 150px; padding: 15px; 
             background: rgba(0, 10, 20, 0.6); 
             border: 1px solid #004455; color: #00f7ff;
             font-family: 'Chakra Petch', sans-serif; resize: vertical; box-sizing: border-box;
-            font-size: 18px; /* Chữ to hơn */
-            border-radius: 5px;
-            line-height: 1.5;
+            font-size: 16px; border-radius: 5px;
         }
         textarea:focus { outline: none; border-color: #00f7ff; box-shadow: 0 0 15px rgba(0,247,255,0.2); }
 
         #file-input { display: none; }
         .file-label {
-            display: block; padding: 40px; text-align: center; border: 2px dashed #004455;
+            display: block; padding: 20px; text-align: center; border: 2px dashed #004455;
             background: rgba(0,247,255,0.05); color: #00f7ff; cursor: pointer; transition: 0.3s;
             font-size: 1.2em;
         }
         .file-label:hover { background: rgba(0,247,255,0.15); border-color: #00f7ff; }
-        #file-name { text-align: center; color: #aaa; margin-top: 15px; font-style: italic; font-size: 1.1em; }
+        #file-name { text-align: center; color: #aaa; margin-top: 10px; font-style: italic; font-size: 1.1em; }
 
-        .control-group { margin: 25px 0; }
-        label { display: block; color: #00f7ff; margin-bottom: 12px; font-weight: 700; font-size: 1.1em; }
+        .control-group { margin: 20px 0; }
+        label { display: block; color: #00f7ff; margin-bottom: 10px; font-weight: 700; font-size: 1.1em; }
         
         select {
-            width: 100%; padding: 15px; background: rgba(0, 10, 20, 0.8); border: 1px solid #004455;
-            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none; font-size: 18px; border-radius: 5px;
+            width: 100%; padding: 12px; background: rgba(0, 10, 20, 0.8); border: 1px solid #004455;
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none; font-size: 16px; border-radius: 5px;
         }
         
         input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; height: 8px; }
 
         #speak-btn {
-            width: 100%; padding: 20px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.2);
-            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.5em; /* Nút to hơn */
+            width: 100%; padding: 15px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.2);
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.5em;
             cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(0,247,255,0.3);
             text-transform: uppercase; margin-top: 20px; letter-spacing: 2px;
         }
         #speak-btn:hover { background: #00f7ff; color: #000; box-shadow: 0 0 30px #00f7ff; }
         #speak-btn:disabled { background: #333; color: #555; cursor: not-allowed; box-shadow: none; border-color: #555; }
 
-        .status { text-align: center; color: #aaa; margin-top: 20px; min-height: 1.5em; font-size: 1.1em; }
+        .status { text-align: center; color: #aaa; margin-top: 15px; min-height: 1.5em; font-size: 1.1em; }
         
-        audio { width: 100%; margin-top: 25px; filter: invert(1) hue-rotate(180deg); height: 40px; }
+        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(180deg); height: 40px; }
         
         .download-button {
-            display: block; width: 100%; text-align: center; padding: 15px;
+            display: block; width: 100%; text-align: center; padding: 12px;
             border: 1px solid #ff00ff; color: #ff00ff; text-decoration: none;
-            margin-top: 20px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
+            margin-top: 15px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
             background: rgba(255, 0, 255, 0.1); font-size: 1.2em;
         }
         .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 25px #ff00ff; }
 
-        /* Mobile Responsive: Tự động thu nhỏ nếu màn hình bé */
+        /* Mobile Responsive */
         @media (max-width: 800px) {
+            .hud-wrapper {
+                background-image: none; /* Mobile bỏ ảnh khung lớn đi cho đỡ vỡ */
+                padding: 20px;
+                min-height: auto;
+            }
             .container { 
-                padding: 60px 40px; 
-                width: 95%; 
-                background-image: none; /* Mobile thì bỏ hình nền khung đi cho đỡ vỡ */
-                border: 2px solid #00f7ff; /* Thay bằng viền thường */
-                box-shadow: 0 0 20px rgba(0,247,255,0.3);
-                background-color: rgba(0, 10, 20, 0.9);
+                width: 100%; 
+                border: 2px solid #00f7ff;
             }
             #splash-screen h1 { font-size: 1.8em; }
             .splash-logo { width: 100px; height: 100px; }
-            textarea { height: 150px; }
         }
     </style>
 </head>
@@ -237,52 +237,54 @@
     </div>
 
     <div id="main-app" style="display: none;">
-        <div class="container">
-            <h2>CHUYỂN ĐỔI VĂN BẢN</h2>
-            
-            <div class="tab-buttons">
-                <button class="tab-button active" onclick="openTab(event, 'text-tab')">NHẬP VĂN BẢN</button>
-                <button class="tab-button" onclick="openTab(event, 'upload-tab')">TẢI FILE WORD</button>
-            </div>
+        <div class="hud-wrapper">
+            <div class="container">
+                <h2>CHUYỂN ĐỔI VĂN BẢN</h2>
+                
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="openTab(event, 'text-tab')">NHẬP VĂN BẢN</button>
+                    <button class="tab-button" onclick="openTab(event, 'upload-tab')">TẢI FILE WORD</button>
+                </div>
 
-            <div id="text-tab" class="tab-content active">
-                <textarea id="text-input" placeholder="Nhập nội dung cần đọc vào đây..."></textarea>
-            </div>
+                <div id="text-tab" class="tab-content active">
+                    <textarea id="text-input" placeholder="Nhập nội dung cần đọc vào đây..."></textarea>
+                </div>
 
-            <div id="upload-tab" class="tab-content">
-                <label for="file-input" class="file-label" id="file-label">NHẤN ĐỂ CHỌN FILE .DOCX</label>
-                <input type="file" id="file-input" accept=".docx">
-                <p id="file-name">Chưa chọn file nào.</p>
-            </div>
+                <div id="upload-tab" class="tab-content">
+                    <label for="file-input" class="file-label" id="file-label">NHẤN ĐỂ CHỌN FILE .DOCX</label>
+                    <input type="file" id="file-input" accept=".docx">
+                    <p id="file-name">Chưa chọn file nào.</p>
+                </div>
 
-            <div class="control-group">
-                <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
-                <select id="voice-select">
-                    <optgroup label="FPT.AI (Tiếng Việt Chuẩn)">
-                        <option value="banmai">👩 Ban Mai (Nữ Bắc)</option>
-                        <option value="leminh">👨 Lê Minh (Nam Bắc)</option>
-                        <option value="myan">👩 Mỹ An (Nữ Nam)</option>
-                        <option value="ngoclam">👩 Ngọc Lam (Nữ Huế)</option>
-                    </optgroup>
-                    <option value="google-vi">🤖 Google (Dự phòng)</option>
-                </select>
-            </div>
+                <div class="control-group">
+                    <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
+                    <select id="voice-select">
+                        <optgroup label="FPT.AI (Tiếng Việt Chuẩn)">
+                            <option value="banmai">👩 Ban Mai (Nữ Bắc)</option>
+                            <option value="leminh">👨 Lê Minh (Nam Bắc)</option>
+                            <option value="myan">👩 Mỹ An (Nữ Nam)</option>
+                            <option value="ngoclam">👩 Ngọc Lam (Nữ Huế)</option>
+                        </optgroup>
+                        <option value="google-vi">🤖 Google (Dự phòng)</option>
+                    </select>
+                </div>
 
-            <div class="control-group">
-                <label for="speed-slider">TỐC ĐỘ: <span id="speed-value">1.0x</span></label>
-                <input type="range" id="speed-slider" min="0.5" max="1.5" value="1.0" step="0.1">
-            </div>
+                <div class="control-group">
+                    <label for="speed-slider">TỐC ĐỘ: <span id="speed-value">1.0x</span></label>
+                    <input type="range" id="speed-slider" min="0.5" max="1.5" value="1.0" step="0.1">
+                </div>
 
-            <button id="speak-btn">XỬ LÝ DỮ LIỆU</button>
-            <p class="status" id="status-msg">Hệ thống sẵn sàng...</p>
-            
-            <audio id="audio-player" controls style="display: none;"></audio>
-            <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">TẢI FILE VỀ MÁY</a>
+                <button id="speak-btn">XỬ LÝ DỮ LIỆU</button>
+                <p class="status" id="status-msg">Hệ thống sẵn sàng...</p>
+                
+                <audio id="audio-player" controls style="display: none;"></audio>
+                <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">TẢI FILE VỀ MÁY</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- LOGIC JS ---
+        // --- LOGIC JS (Không đổi) ---
         const splash = document.getElementById('splash-screen');
         const mainApp = document.getElementById('main-app');
         const startButton = document.getElementById('start-button');
@@ -301,7 +303,6 @@
         const fileLabel = document.getElementById('file-label');
         let currentBlobUrl = null; 
 
-        // Xử lý nút Bắt Đầu
         startButton.addEventListener('click', () => {
             splash.style.opacity = '0'; 
             setTimeout(() => { 
@@ -311,7 +312,6 @@
             }, 800); 
         });
 
-        // Tab chuyển đổi
         window.openTab = function(evt, tabName) { 
             document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
             document.querySelectorAll('.tab-button').forEach(btn => btn.className = btn.className.replace(" active", ""));
@@ -319,12 +319,10 @@
             evt.currentTarget.className += " active";
         };
 
-        // Slider tốc độ
         speedSlider.addEventListener('input', () => {
             speedValue.textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
         });
 
-        // Đọc file Word
         fileInput.addEventListener('change', (event) => {
             if (event.target.files.length === 0) return;
             const file = event.target.files[0];
@@ -343,7 +341,6 @@
             reader.readAsArrayBuffer(file);
         });
 
-        // Gọi API TTS
         async function speakWithApi() {
             const text = textInput.value;
             if (!text) { statusMsg.textContent = "Vui lòng nhập nội dung!"; return; }
