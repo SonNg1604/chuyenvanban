@@ -14,386 +14,367 @@
     <style>
         /* --- 1. CẤU HÌNH CHUNG --- */
         body {
-            font-family: 'Orbitron', sans-serif; /* Font chữ kiểu tương lai */
+            font-family: 'Orbitron', sans-serif; /* Font Cyberpunk */
             margin: 0; display: flex;
             justify-content: center; align-items: center; min-height: 100vh;
-            color: #00f7ff; /* Màu chữ xanh neon chủ đạo */
+            color: #00f7ff; /* Màu Neon Blue chủ đạo */
             overflow-x: hidden; 
-            background-color: #000; /* Nền đen */
+            background-color: #000;
             position: relative;
         }
         
-        /* --- 2. HÌNH NỀN ĐỘNG CYBERPUNK --- */
+        /* --- 2. HÌNH NỀN ĐỘNG (BACKGROUND ANIMATION) --- */
         .cyberpunk-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden;
+            background-color: #050510; /* Nền tối */
         }
 
+        /* Bạn nhớ upload ảnh nền tối/công nghệ tên là 'image_36.png' nhé */
         .bg-image {
             width: 100%; height: 100%;
-            object-fit: cover; /* Đảm bảo ảnh phủ kín màn hình */
+            object-fit: cover;
             position: absolute; top: 0; left: 0;
-            opacity: 0.8; /* Làm ảnh hơi tối để làm nền */
+            opacity: 0.6;
         }
 
-        /* Lớp phủ tạo hiệu ứng tia sáng chạy (Scanlines) */
+        /* Hiệu ứng quét ngang (Scanlines) */
         .scanlines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 247, 255, 0) 50%,
-                rgba(0, 247, 255, 0.05) 50%
-            );
-            background-size: 100% 4px; /* Kích thước dòng kẻ ngang */
-            z-index: 2;
-            pointer-events: none; /* Không chặn click chuột */
+            background: linear-gradient(to bottom, rgba(0,247,255,0) 50%, rgba(0,247,255,0.02) 50%);
+            background-size: 100% 3px;
+            z-index: 1; pointer-events: none;
         }
 
-        /* Hiệu ứng vệt sáng chạy ngang (Glitch Line) */
+        /* Hiệu ứng tia sáng chạy (Glitch Lines) */
         .glitch-line {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, transparent, #00f7ff, transparent);
-            opacity: 0.7;
-            z-index: 3;
-            animation: glitch-anim 5s infinite linear;
-            box-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+            position: absolute; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(to right, transparent, #00f7ff, #ff00ff, transparent);
+            opacity: 0.8; z-index: 2;
+            box-shadow: 0 0 10px #00f7ff;
+            animation: glitch-anim 4s infinite linear;
         }
+        .glitch-line:nth-child(2) { animation-delay: 2s; height: 1px; opacity: 0.5; }
 
         @keyframes glitch-anim {
             0% { top: -10%; opacity: 0; }
-            10% { opacity: 0.7; }
-            50% { opacity: 0.7; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% { top: 110%; opacity: 0; }
         }
 
-        /* Lớp phủ màu tạo không khí Cyberpunk */
-        .color-overlay {
+        /* Lớp phủ mờ tạo không khí */
+        .vignette {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
-            mix-blend-mode: overlay; /* Hòa trộn màu */
-            z-index: 4;
-            pointer-events: none;
+            background: radial-gradient(circle, transparent 40%, #000 100%);
+            z-index: 3; pointer-events: none;
         }
 
+        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; text-align: center;
+            z-index: 1000; opacity: 1; transition: opacity 0.8s ease-out;
+            /* Không đặt nền màu ở đây để nhìn xuyên thấu xuống background động */
+            backdrop-filter: blur(3px); /* Làm mờ nhẹ nền đằng sau */
+        }
 
-        /* --- 3. GIAO DIỆN CHÍNH (Đã chỉnh lại màu cho hợp style) --- */
-        /* Logo Quân Đội (Góc trái trên cùng) */
+        .splash-logo {
+            width: 140px; height: 140px; margin-bottom: 30px;
+            filter: drop-shadow(0 0 15px #00f7ff); /* Logo phát sáng neon */
+            animation: pulse-logo 2s infinite ease-in-out;
+        }
+        @keyframes pulse-logo {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px #00f7ff); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px #00f7ff); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px #00f7ff); }
+        }
+
+        #splash-screen h1 {
+            font-size: 2.5em; font-weight: 800; margin: 10px 0;
+            text-transform: uppercase; letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; /* Chữ phát sáng */
+        }
+
+        #splash-screen p {
+            font-size: 1.2em; color: #aaa; margin-bottom: 50px; letter-spacing: 1px;
+        }
+        #author-name { color: #ff00ff; font-weight: 700; text-shadow: 0 0 5px #ff00ff; } /* Tên tác giả màu hồng neon */
+
+        /* Nút Bắt Đầu kiểu Cyberpunk */
+        #start-button {
+            padding: 15px 60px; 
+            border: 2px solid #00f7ff; 
+            background: rgba(0, 247, 255, 0.1);
+            color: #00f7ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5em; font-weight: 800; 
+            cursor: pointer; position: relative; overflow: hidden;
+            transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); /* Cắt góc nút */
+        }
+        #start-button:hover {
+            background: #00f7ff; color: #000;
+            box-shadow: 0 0 40px #00f7ff;
+        }
+
+        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) --- */
+        #main-app { display: none; width: 100%; display: flex; justify-content: center; } /* Flex để căn giữa container */
+        
         .logo-quan-doi-goc {
-            position: fixed; top: 20px; left: 20px;
-            width: 65px; height: auto; z-index: 100; 
-            filter: drop-shadow(0 0 5px #00f7ff); /* Bóng neon */
-            display: block; /* Hiện luôn */
+            position: fixed; top: 20px; left: 20px; width: 60px; height: auto; z-index: 100;
+            filter: drop-shadow(0 0 5px #00f7ff); display: none; /* Ẩn lúc đầu */
         }
 
-        /* Khung ứng dụng chính */
         .container {
-            background-color: rgba(0, 20, 40, 0.85); /* Nền tối trong suốt */
-            padding: 25px; border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3), inset 0 0 20px rgba(0, 247, 255, 0.1); /* Bóng neon trong ngoài */
-            width: 90%; max-width: 550px;
+            background-color: rgba(10, 20, 30, 0.85); /* Nền tối kính */
+            padding: 30px; border-radius: 5px; /* Bo ít thôi cho cứng cáp */
+            width: 90%; max-width: 600px;
+            border: 1px solid #00f7ff;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1), inset 0 0 20px rgba(0, 247, 255, 0.05);
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
             position: relative; z-index: 10;
-            border: 2px solid #00f7ff; /* Viền neon */
-            backdrop-filter: blur(10px); 
-        }
-        h2 {
-            text-align: center; color: #00f7ff; /* Chữ neon */
-            margin-top: 0; margin-bottom: 20px;
-            font-size: 1.8em; font-weight: 800;
-            text-shadow: 0 0 10px rgba(0, 247, 255, 0.7);
-            letter-spacing: 2px;
         }
 
-        /* Tab Button */
-        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 2px solid #005577; }
+        h2 { text-align: center; color: #00f7ff; margin-bottom: 25px; text-shadow: 0 0 10px rgba(0,247,255,0.5); }
+
+        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 2px solid #333; }
         .tab-button {
-            flex: 1; padding: 12px 10px; border: none;
-            background-color: transparent; cursor: pointer;
-            font-size: 16px; font-weight: 600; color: #005577;
-            border-bottom: 3px solid transparent; transition: all 0.3s;
-            text-transform: uppercase;
+            flex: 1; padding: 12px; background: transparent; border: none;
+            color: #555; font-family: 'Orbitron', sans-serif; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
         }
-        .tab-button.active { 
-            color: #00f7ff; border-bottom-color: #00f7ff; 
-            text-shadow: 0 0 5px #00f7ff;
-        }
+        .tab-button.active { color: #00f7ff; border-bottom: 2px solid #00f7ff; text-shadow: 0 0 5px #00f7ff; }
+        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        /* Upload file */
-        #upload-tab { text-align: center; }
+
+        textarea {
+            width: 100%; height: 150px; padding: 15px; 
+            background: rgba(0,0,0,0.6); border: 1px solid #333; color: #00f7ff;
+            font-family: 'Orbitron', sans-serif; resize: vertical; box-sizing: border-box;
+        }
+        textarea:focus { outline: none; border-color: #00f7ff; box-shadow: 0 0 10px rgba(0,247,255,0.3); }
+
         #file-input { display: none; }
         .file-label {
-            display: block; padding: 20px;
-            border: 2px dashed #00f7ff; border-radius: 10px;
-            background-color: rgba(0, 247, 255, 0.1); cursor: pointer;
-            font-size: 16px; color: #00f7ff;
-            font-weight: 600; transition: all 0.3s;
+            display: block; padding: 20px; text-align: center; border: 1px dashed #00f7ff;
+            background: rgba(0,247,255,0.05); color: #00f7ff; cursor: pointer; transition: 0.3s;
         }
-        .file-label:hover { 
-            background-color: rgba(0, 247, 255, 0.2); 
-            box-shadow: 0 0 10px #00f7ff;
-        }
-        #file-name { margin-top: 15px; font-size: 14px; color: #aaa; font-style: italic; }
+        .file-label:hover { background: rgba(0,247,255,0.15); box-shadow: 0 0 15px rgba(0,247,255,0.3); }
+        #file-name { text-align: center; color: #aaa; margin-top: 10px; font-style: italic; }
 
-        /* Form Controls */
-        textarea {
-            width: 100%; height: 140px; padding: 12px; 
-            border: 2px solid #005577; border-radius: 10px; 
-            font-size: 16px; box-sizing: border-box; margin-bottom: 18px;
-            resize: vertical; 
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #00f7ff;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            font-family: 'Orbitron', sans-serif;
-        }
-        textarea:focus { 
-            border-color: #00f7ff; outline: none; 
-            box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
-        }
-        
-        .control-group { margin-bottom: 18px; }
-        label { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; margin-bottom: 8px; color: #00f7ff; text-transform: uppercase; letter-spacing: 1px; }
+        .control-group { margin: 20px 0; }
+        label { display: block; color: #00f7ff; margin-bottom: 10px; font-weight: 700; }
         
         select {
-            width: 100%; padding: 12px; border-radius: 10px; 
-            border: 2px solid #005577; font-size: 16px; 
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #00f7ff; outline: none;
-            font-family: 'Orbitron', sans-serif;
+            width: 100%; padding: 12px; background: #050510; border: 1px solid #333;
+            color: #00f7ff; font-family: 'Orbitron', sans-serif; outline: none;
         }
-        select:focus { border-color: #00f7ff; box-shadow: 0 0 10px rgba(0, 247, 255, 0.5); }
         
-        input[type="range"] { width: 100%; cursor: pointer; accent-color: #00f7ff; }
-        
+        input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; }
+
         #speak-btn {
-            width: 100%; padding: 14px; border: 2px solid #00f7ff; border-radius: 10px; 
-            cursor: pointer; font-weight: 800; font-size: 18px; 
-            transition: all 0.3s ease-in-out;
-            background-color: rgba(0, 247, 255, 0.2); color: #00f7ff;
-            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
-            display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase; letter-spacing: 2px;
+            width: 100%; padding: 15px; border: none; background: #00f7ff;
+            color: #000; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.2em;
+            cursor: pointer; clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
+            transition: 0.3s; box-shadow: 0 0 20px rgba(0,247,255,0.5);
         }
-        #speak-btn:hover { 
-            background-color: #00f7ff; color: #000; 
-            box-shadow: 0 0 30px rgba(0, 247, 255, 0.8);
-            transform: scale(1.02);
-        }
-        #speak-btn:disabled { 
-            background-color: #333; border-color: #555; color: #777; 
-            cursor: not-allowed; transform: none; box-shadow: none;
-        }
+        #speak-btn:hover { background: #fff; box-shadow: 0 0 40px #00f7ff; }
+        #speak-btn:disabled { background: #333; color: #555; cursor: not-allowed; box-shadow: none; }
+
+        .status { text-align: center; color: #aaa; margin-top: 15px; min-height: 1.2em; }
         
-        .status { text-align: center; font-size: 14px; color: #aaa; margin-top: 18px; min-height: 1.2em; }
-        
-        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(180deg); /* Đổi màu trình phát cho hợp */ }
+        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(180deg); }
         
         .download-button {
-            display: block; width: 100%; box-sizing: border-box; text-align: center;
-            padding: 12px; border: 2px solid #ff00ff; border-radius: 10px; /* Màu hồng neon */
-            cursor: pointer; font-weight: bold; font-size: 16px; 
-            transition: all 0.3s; background-color: rgba(255, 0, 255, 0.2); 
-            color: #ff00ff; text-decoration: none; margin-top: 10px;
-            text-transform: uppercase; letter-spacing: 1px;
-             box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+            display: block; width: 100%; text-align: center; padding: 12px;
+            border: 1px solid #ff00ff; color: #ff00ff; text-decoration: none;
+            margin-top: 15px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
         }
-        .download-button:hover { 
-            background-color: #ff00ff; color: #000;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
-        }
+        .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 20px #ff00ff; }
 
-        @media (max-width: 600px) { 
-            .logo-quan-doi-goc { top: 15px; left: 15px; width: 50px; } 
-            .container { padding: 20px; width: 95%; } 
-            h2 { font-size: 1.5em; } 
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            #splash-screen h1 { font-size: 1.8em; }
+            .splash-logo { width: 100px; height: 100px; }
+            .container { padding: 15px; width: 95%; }
         }
     </style>
 </head>
 <body>
 
-<div class="cyberpunk-bg">
-    <img src="/image_36.png" alt="Cyberpunk Background" class="bg-image">
-    
-    <div class="scanlines"></div> <div class="glitch-line" style="animation-delay: 0s;"></div> <div class="glitch-line" style="animation-delay: 2.5s;"></div> <div class="color-overlay"></div> </div>
-
-<img src="/logo_quan_doi.png" alt="Logo Quân Đội" class="logo-quan-doi-goc" id="main-logo">
-
-<div id="main-app">
-    <div class="container">
-        <h2>CHUYỂN ĐỔI VĂN BẢN (TTS)</h2>
-        
-        <div class="tab-buttons">
-            <button class="tab-button active" onclick="openTab(event, 'text-tab')">Nhập văn bản</button>
-            <button class="tab-button" onclick="openTab(event, 'upload-tab')">Tải file Word</button>
-        </div>
-
-        <div id="text-tab" class="tab-content active">
-            <textarea id="text-input" placeholder="Nhập văn bản cần đọc tại đây...">Kính mời quý Thủ trưởng cùng các đồng chí nhập văn bản.</textarea>
-        </div>
-
-        <div id="upload-tab" class="tab-content">
-            <label for="file-input" class="file-label" id="file-label">CHỌN FILE .DOCX</label>
-            <input type="file" id="file-input" accept=".docx">
-            <p id="file-name">Chưa chọn file nào.</p>
-        </div>
-        
-        <div class="control-group" style="margin-top: 20px;">
-            <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
-            <select id="voice-select">
-                <option value="google-vi">📢 Google (Miễn phí - Nhanh)</option>
-                
-                <optgroup label="FPT.AI - Giọng Nữ Miền Bắc">
-                    <option value="banmai" selected>👩 Ban Mai (Tiêu chuẩn)</option>
-                    <option value="thuminh">👩 Thu Minh (Cao cấp)</option>
-                </optgroup>
-                <optgroup label="FPT.AI - Giọng Nam Miền Bắc">
-                    <option value="leminh">👨 Lê Minh (Tiêu chuẩn)</option>
-                </optgroup>
-                <optgroup label="FPT.AI - Giọng Miền Nam">
-                    <option value="myan">👩 Mỹ An (Tiêu chuẩn)</option>
-                    <option value="lannhi">👩 Lan Nhi (Cao cấp)</option>
-                    <option value="linhsan">👩 Linh San (Cao cấp)</option>
-                    <option value="minhquang">👨 Minh Quang (Cao cấp)</option>
-                </optgroup>
-                <optgroup label="FPT.AI - Giọng Miền Trung">
-                    <option value="ngoclam">👩 Ngọc Lam (Huế - Cao cấp)</option>
-                    <option value="giahuy">👨 Gia Huy (Huế - Cao cấp)</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <label for="speed-slider">TỐC ĐỘ ĐỌC: <span id="speed-value">1.0x</span></label>
-            <input type="range" id="speed-slider" min="0.5" max="1.5" value="1.0" step="0.1">
-        </div>
-
-        <button id="speak-btn">🚀 TẠO GIỌNG NÓI</button>
-        <p class="status" id="status-msg">Hệ thống sẵn sàng...</p>
-        
-        <audio id="audio-player" controls style="display: none;"></audio>
-        <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">TẢI FILE .MP3</a>
+    <div class="cyberpunk-bg">
+        <img src="/image_36.png" alt="BG" class="bg-image">
+        <div class="scanlines"></div>
+        <div class="glitch-line" style="top: 20%;"></div>
+        <div class="glitch-line" style="top: 60%; animation-delay: 2s;"></div>
+        <div class="vignette"></div>
     </div>
-</div>
 
-<script>
-    // --- JS LOGIC (Giữ nguyên logic cũ, chỉ bỏ màn hình chào) ---
-    // const splash = document.getElementById('splash-screen'); // Bỏ
-    const mainApp = document.getElementById('main-app');
-    // const startButton = document.getElementById('start-button'); // Bỏ
-    const mainLogo = document.getElementById('main-logo');
-    
-    const MY_SERVER_URL = '/api/tts'; 
-    const textInput = document.getElementById('text-input');
-    const voiceSelect = document.getElementById('voice-select');
-    const speakBtn = document.getElementById('speak-btn');
-    const statusMsg = document.getElementById('status-msg');
-    const audioPlayer = document.getElementById('audio-player');
-    const downloadBtn = document.getElementById('download-btn');
-    const speedSlider = document.getElementById('speed-slider');
-    const speedValue = document.getElementById('speed-value');
-    const fileInput = document.getElementById('file-input');
-    const fileNameDisplay = document.getElementById('file-name');
-    const fileLabel = document.getElementById('file-label');
+    <img src="/logo_quan_doi.png" alt="Logo" class="logo-quan-doi-goc" id="main-logo">
 
-    let currentBlobUrl = null; 
+    <div id="splash-screen">
+        <img src="/logo_thuyet_minh.png" alt="Logo Splash" class="splash-logo">
+        <h1>PHẦN MỀM<br>HỖ TRỢ THUYẾT MINH</h1>
+        <p>Tác giả: <span id="author-name">Đỗ Nhật Quang</span></p>
+        <button id="start-button">BẮT ĐẦU</button>
+    </div>
 
-    // Hiển thị ngay màn hình chính
-    mainApp.style.display = 'block';
-    // mainLogo.style.display = 'block'; // Đã set trong CSS là display: block rồi
-
-    speedSlider.addEventListener('input', () => {
-        speedValue.textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
-    });
-
-    window.openTab = function(evt, tabName) { 
-        document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
-        document.querySelectorAll('.tab-button').forEach(btn => btn.className = btn.className.replace(" active", ""));
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-        if (tabName === 'text-tab') {
-            fileInput.value = null; 
-            fileNameDisplay.textContent = "Chưa chọn file nào.";
-            fileLabel.textContent = "CHỌN FILE .DOCX";
-        }
-    };
-
-    fileInput.addEventListener('change', (event) => {
-        if (event.target.files.length === 0) { fileNameDisplay.textContent = "Chưa chọn file nào."; return; }
-        const file = event.target.files[0];
-        fileNameDisplay.textContent = file.name; 
-        fileLabel.textContent = "Đang đọc file..."; 
-        statusMsg.textContent = "Đang đọc file Word...";
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const arrayBuffer = e.target.result;
-            mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-                .then(result => { 
-                    textInput.value = result.value; 
-                    statusMsg.textContent = "Đã trích xuất văn bản."; 
-                    fileLabel.textContent = "CHỌN FILE KHÁC"; 
-                })
-                .catch(err => { 
-                    console.error(err); 
-                    statusMsg.textContent = "Lỗi đọc file."; 
-                    fileLabel.textContent = "THỬ LẠI"; 
-                });
-        };
-        reader.readAsArrayBuffer(file);
-    });
-
-    async function speakWithApi() {
-        const text = textInput.value;
-        const voiceId = voiceSelect.value;
-        const speed = speedSlider.value.toString(); 
-
-        if (!text) { statusMsg.textContent = "Lỗi: Văn bản rỗng."; return; }
-
-        speakBtn.disabled = true;
-        statusMsg.textContent = "Đang xử lý dữ liệu... (Vui lòng chờ)";
-        
-        audioPlayer.style.display = "none";
-        downloadBtn.style.display = "none";
-        
-        if (currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
-
-        try {
-            const response = await fetch(MY_SERVER_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: text, voice: voiceId, speed: speed }) 
-            });
-
-            if (!response.ok) {
-                try { const errData = await response.json(); throw new Error(errData.error || `Lỗi API: ${response.statusText}`); } 
-                catch (jsonError) { throw new Error(`Lỗi API: ${response.status} ${response.statusText}`); }
-            }
-
-            statusMsg.textContent = "Thành công! Đang truyền dữ liệu về...";
-            const audioBlob = await response.blob();
-            currentBlobUrl = URL.createObjectURL(audioBlob);
-
-            audioPlayer.src = currentBlobUrl;
-            audioPlayer.style.display = "block";
-            audioPlayer.play();
+    <div id="main-app" style="display: none;">
+        <div class="container">
+            <h2>CHUYỂN ĐỔI VĂN BẢN</h2>
             
-            downloadBtn.href = currentBlobUrl; 
-            downloadBtn.style.display = "block"; 
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'text-tab')">NHẬP VĂN BẢN</button>
+                <button class="tab-button" onclick="openTab(event, 'upload-tab')">TẢI FILE WORD</button>
+            </div>
 
-            statusMsg.textContent = "Hoàn tất tác vụ.";
+            <div id="text-tab" class="tab-content active">
+                <textarea id="text-input" placeholder="Nhập nội dung cần đọc..."></textarea>
+            </div>
 
-        } catch (error) {
-            console.error(error);
-            statusMsg.textContent = "Lỗi hệ thống: " + error.message;
-        } finally {
-            speakBtn.disabled = false;
+            <div id="upload-tab" class="tab-content">
+                <label for="file-input" class="file-label" id="file-label">CHỌN FILE .DOCX</label>
+                <input type="file" id="file-input" accept=".docx">
+                <p id="file-name">Chưa chọn file nào.</p>
+            </div>
+
+            <div class="control-group">
+                <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
+                <select id="voice-select">
+                    <optgroup label="FPT.AI (Tiếng Việt Chuẩn)">
+                        <option value="banmai">👩 Ban Mai (Nữ Bắc)</option>
+                        <option value="leminh">👨 Lê Minh (Nam Bắc)</option>
+                        <option value="myan">👩 Mỹ An (Nữ Nam)</option>
+                        <option value="ngoclam">👩 Ngọc Lam (Nữ Huế)</option>
+                    </optgroup>
+                    <option value="google-vi">🤖 Google (Dự phòng)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="speed-slider">TỐC ĐỘ: <span id="speed-value">1.0x</span></label>
+                <input type="range" id="speed-slider" min="0.5" max="1.5" value="1.0" step="0.1">
+            </div>
+
+            <button id="speak-btn">XỬ LÝ DỮ LIỆU</button>
+            <p class="status" id="status-msg">Hệ thống sẵn sàng...</p>
+            
+            <audio id="audio-player" controls style="display: none;"></audio>
+            <a id="download-btn" class="download-button" href="#" style="display: none;" download="speech.mp3">TẢI FILE VỀ MÁY</a>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGIC JS ---
+        const splash = document.getElementById('splash-screen');
+        const mainApp = document.getElementById('main-app');
+        const startButton = document.getElementById('start-button');
+        const mainLogo = document.getElementById('main-logo');
+        const MY_SERVER_URL = '/api/tts'; 
+        const textInput = document.getElementById('text-input');
+        const voiceSelect = document.getElementById('voice-select');
+        const speakBtn = document.getElementById('speak-btn');
+        const statusMsg = document.getElementById('status-msg');
+        const audioPlayer = document.getElementById('audio-player');
+        const downloadBtn = document.getElementById('download-btn');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const fileInput = document.getElementById('file-input');
+        const fileNameDisplay = document.getElementById('file-name');
+        const fileLabel = document.getElementById('file-label');
+        let currentBlobUrl = null; 
+
+        // Xử lý nút Bắt Đầu
+        startButton.addEventListener('click', () => {
+            splash.style.opacity = '0'; // Làm mờ màn hình chào
+            setTimeout(() => { 
+                splash.style.display = 'none'; // Ẩn hẳn
+                mainApp.style.display = 'flex'; // Hiện app chính
+                mainLogo.style.display = 'block'; // Hiện logo góc trái
+            }, 800); 
+        });
+
+        // Tab chuyển đổi
+        window.openTab = function(evt, tabName) { 
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.querySelectorAll('.tab-button').forEach(btn => btn.className = btn.className.replace(" active", ""));
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        };
+
+        // Slider tốc độ
+        speedSlider.addEventListener('input', () => {
+            speedValue.textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
+        });
+
+        // Đọc file Word
+        fileInput.addEventListener('change', (event) => {
+            if (event.target.files.length === 0) return;
+            const file = event.target.files[0];
+            fileNameDisplay.textContent = file.name; 
+            fileLabel.textContent = "ĐANG ĐỌC FILE...";
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                mammoth.extractRawText({ arrayBuffer: e.target.result })
+                    .then(result => { 
+                        textInput.value = result.value; 
+                        fileLabel.textContent = "ĐÃ NHẬP DỮ LIỆU"; 
+                    })
+                    .catch(err => { console.error(err); fileLabel.textContent = "LỖI FILE"; });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Gọi API TTS
+        async function speakWithApi() {
+            const text = textInput.value;
+            if (!text) { statusMsg.textContent = "Vui lòng nhập nội dung!"; return; }
+
+            speakBtn.disabled = true;
+            statusMsg.textContent = "Đang kết nối máy chủ...";
+            audioPlayer.style.display = "none";
+            downloadBtn.style.display = "none";
+
+            try {
+                const response = await fetch(MY_SERVER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        text: text, 
+                        voice: voiceSelect.value, 
+                        speed: speedSlider.value.toString() 
+                    }) 
+                });
+
+                if (!response.ok) throw new Error("Lỗi kết nối server");
+
+                const audioBlob = await response.blob();
+                if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+                currentBlobUrl = URL.createObjectURL(audioBlob);
+
+                audioPlayer.src = currentBlobUrl;
+                audioPlayer.style.display = "block";
+                audioPlayer.play();
+                downloadBtn.href = currentBlobUrl; 
+                downloadBtn.style.display = "block"; 
+                statusMsg.textContent = "Xử lý thành công!";
+
+            } catch (error) {
+                statusMsg.textContent = "Lỗi: " + error.message;
+            } finally {
+                speakBtn.disabled = false;
+            }
         }
-    }
-    speakBtn.addEventListener('click', speakWithApi);
-</script>
+        speakBtn.addEventListener('click', speakWithApi);
+    </script>
 
 </body>
 </html>
