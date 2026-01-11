@@ -14,17 +14,16 @@
     <style>
         /* --- 1. CẤU HÌNH CHUNG --- */
         body {
-            /* FONT MỚI: Vuông vức, đậm chất kỹ thuật quân sự */
             font-family: 'Chakra Petch', sans-serif; 
             margin: 0; display: flex;
             justify-content: center; align-items: center; min-height: 100vh;
-            color: #00f7ff; /* Màu Neon Blue chủ đạo */
+            color: #00f7ff; 
             overflow-x: hidden; 
             background-color: #000;
             position: relative;
         }
         
-        /* --- 2. HÌNH NỀN ĐỘNG (BACKGROUND ANIMATION) --- */
+        /* --- 2. HÌNH NỀN ĐỘNG (GIỮ NGUYÊN CHO MÀN HÌNH CHỜ) --- */
         .cyberpunk-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden;
@@ -38,13 +37,12 @@
             opacity: 0.6;
         }
 
+        /* Các hiệu ứng tia sáng (Scanlines, Glitch) */
         .scanlines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(0,247,255,0) 50%, rgba(0,247,255,0.02) 50%);
-            background-size: 100% 3px;
-            z-index: 1; pointer-events: none;
+            background-size: 100% 3px; z-index: 1; pointer-events: none;
         }
-
         .glitch-line {
             position: absolute; left: 0; width: 100%; height: 2px;
             background: linear-gradient(to right, transparent, #00f7ff, #ff00ff, transparent);
@@ -56,24 +54,22 @@
 
         @keyframes glitch-anim {
             0% { top: -10%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
             100% { top: 110%; opacity: 0; }
         }
-
+        
         .vignette {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, transparent 40%, #000 100%);
             z-index: 3; pointer-events: none;
         }
 
-        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) --- */
+        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) - GIỮ NGUYÊN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             flex-direction: column; text-align: center;
             z-index: 1000; opacity: 1; transition: opacity 0.8s ease-out;
-            backdrop-filter: blur(3px); 
+            backdrop-filter: blur(5px); 
         }
 
         .splash-logo {
@@ -90,34 +86,22 @@
         #splash-screen h1 {
             font-size: 2.5em; font-weight: 700; margin: 10px 0;
             text-transform: uppercase; letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; 
+            color: #fff; text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff; 
         }
-
-        #splash-screen p {
-            font-size: 1.2em; color: #aaa; margin-bottom: 50px; letter-spacing: 1px;
-        }
+        #splash-screen p { font-size: 1.2em; color: #aaa; margin-bottom: 50px; letter-spacing: 1px; }
         #author-name { color: #ff00ff; font-weight: 700; text-shadow: 0 0 5px #ff00ff; } 
 
         #start-button {
-            padding: 15px 60px; 
-            border: 2px solid #00f7ff; 
-            background: rgba(0, 247, 255, 0.1);
-            color: #00f7ff;
-            font-family: 'Chakra Petch', sans-serif; /* Font mới */
-            font-size: 1.5em; font-weight: 700; 
-            cursor: pointer; position: relative; overflow: hidden;
-            transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+            padding: 15px 60px; border: 2px solid #00f7ff; 
+            background: rgba(0, 247, 255, 0.1); color: #00f7ff;
+            font-family: 'Chakra Petch', sans-serif; font-size: 1.5em; font-weight: 700; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3); transition: 0.3s;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); 
         }
-        #start-button:hover {
-            background: #00f7ff; color: #000;
-            box-shadow: 0 0 40px #00f7ff;
-        }
+        #start-button:hover { background: #00f7ff; color: #000; box-shadow: 0 0 40px #00f7ff; }
 
-        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) --- */
+        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - THAY ĐỔI LỚN --- */
         #main-app { display: none; width: 100%; display: flex; justify-content: center; } 
         
         .logo-quan-doi-goc {
@@ -125,20 +109,28 @@
             filter: drop-shadow(0 0 5px #00f7ff); display: none; 
         }
 
+        /* --- CẬP NHẬT CONTAINER DÙNG ẢNH KHUNG HUD --- */
         .container {
-            background-color: rgba(10, 20, 30, 0.85); 
-            padding: 30px; border-radius: 5px; 
-            width: 90%; max-width: 600px;
-            border: 1px solid #00f7ff;
-            box-shadow: 0 0 20px rgba(0, 247, 255, 0.1), inset 0 0 20px rgba(0, 247, 255, 0.05);
-            backdrop-filter: blur(10px);
+            /* Dùng ảnh khung viền HUD làm nền */
+            background-image: url('/hud-frame.png'); 
+            background-size: 100% 100%; /* Kéo giãn ảnh cho vừa khung */
+            background-repeat: no-repeat;
+            background-color: transparent; /* Nền trong suốt để thấy background động phía sau */
+            
+            /* Xóa viền CSS cũ vì đã có viền ảnh */
+            border: none; 
+            box-shadow: none;
+            
+            /* Căn chỉnh nội dung vào giữa khung */
+            padding: 60px 50px; /* Padding lớn để tránh đè lên viền ảnh */
+            width: 90%; max-width: 650px;
             margin-top: 20px;
             position: relative; z-index: 10;
         }
 
         h2 { text-align: center; color: #00f7ff; margin-bottom: 25px; text-shadow: 0 0 10px rgba(0,247,255,0.5); }
 
-        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 2px solid #333; }
+        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 247, 255, 0.3); }
         .tab-button {
             flex: 1; padding: 12px; background: transparent; border: none;
             color: #555; font-family: 'Chakra Petch', sans-serif; font-weight: 700;
@@ -151,40 +143,39 @@
 
         textarea {
             width: 100%; height: 150px; padding: 15px; 
-            background: rgba(0,0,0,0.6); border: 1px solid #333; color: #00f7ff;
+            background: rgba(0, 10, 20, 0.6); /* Nền tối nhẹ cho ô nhập liệu */
+            border: 1px solid #004455; color: #00f7ff;
             font-family: 'Chakra Petch', sans-serif; resize: vertical; box-sizing: border-box;
-            font-size: 16px;
+            font-size: 16px; border-radius: 5px;
         }
-        textarea:focus { outline: none; border-color: #00f7ff; box-shadow: 0 0 10px rgba(0,247,255,0.3); }
+        textarea:focus { outline: none; border-color: #00f7ff; }
 
         #file-input { display: none; }
         .file-label {
-            display: block; padding: 20px; text-align: center; border: 1px dashed #00f7ff;
+            display: block; padding: 20px; text-align: center; border: 1px dashed #004455;
             background: rgba(0,247,255,0.05); color: #00f7ff; cursor: pointer; transition: 0.3s;
         }
-        .file-label:hover { background: rgba(0,247,255,0.15); box-shadow: 0 0 15px rgba(0,247,255,0.3); }
+        .file-label:hover { background: rgba(0,247,255,0.15); border-color: #00f7ff; }
         #file-name { text-align: center; color: #aaa; margin-top: 10px; font-style: italic; }
 
         .control-group { margin: 20px 0; }
         label { display: block; color: #00f7ff; margin-bottom: 10px; font-weight: 700; }
         
         select {
-            width: 100%; padding: 12px; background: #050510; border: 1px solid #333;
-            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none;
-            font-size: 16px;
+            width: 100%; padding: 12px; background: rgba(0, 10, 20, 0.8); border: 1px solid #004455;
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none; font-size: 16px; border-radius: 5px;
         }
-        select:focus { border-color: #00f7ff; box-shadow: 0 0 10px rgba(0, 247, 255, 0.5); }
         
         input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; }
 
         #speak-btn {
-            width: 100%; padding: 15px; border: none; background: #00f7ff;
-            color: #000; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.2em;
-            cursor: pointer; clip-path: polygon(5% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
-            transition: 0.3s; box-shadow: 0 0 20px rgba(0,247,255,0.5);
+            width: 100%; padding: 15px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.2);
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.2em;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0,247,255,0.2);
+            text-transform: uppercase; margin-top: 10px;
         }
-        #speak-btn:hover { background: #fff; box-shadow: 0 0 40px #00f7ff; }
-        #speak-btn:disabled { background: #333; color: #555; cursor: not-allowed; box-shadow: none; }
+        #speak-btn:hover { background: #00f7ff; color: #000; box-shadow: 0 0 20px #00f7ff; }
+        #speak-btn:disabled { background: #333; color: #555; cursor: not-allowed; box-shadow: none; border-color: #555; }
 
         .status { text-align: center; color: #aaa; margin-top: 15px; min-height: 1.2em; }
         
@@ -194,14 +185,20 @@
             display: block; width: 100%; text-align: center; padding: 12px;
             border: 1px solid #ff00ff; color: #ff00ff; text-decoration: none;
             margin-top: 15px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
+            background: rgba(255, 0, 255, 0.1);
         }
         .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 20px #ff00ff; }
 
         /* Mobile Responsive */
         @media (max-width: 600px) {
+            .container { 
+                padding: 40px 20px; /* Giảm padding trên mobile */
+                width: 95%; 
+                background-image: none; /* Mobile có thể bỏ khung nếu bị vỡ, hoặc giữ nguyên */
+                border: 1px solid #00f7ff; /* Fallback border cho mobile */
+            }
             #splash-screen h1 { font-size: 1.8em; }
             .splash-logo { width: 100px; height: 100px; }
-            .container { padding: 15px; width: 95%; }
         }
     </style>
 </head>
