@@ -23,7 +23,7 @@
             position: relative;
         }
         
-        /* --- 2. HÌNH NỀN ĐỘNG (GIỮ NGUYÊN CHO MÀN HÌNH CHỜ) --- */
+        /* --- 2. HÌNH NỀN ĐỘNG --- */
         .cyberpunk-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; overflow: hidden;
@@ -37,7 +37,6 @@
             opacity: 0.6;
         }
 
-        /* Các hiệu ứng tia sáng (Scanlines, Glitch) */
         .scanlines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(0,247,255,0) 50%, rgba(0,247,255,0.02) 50%);
@@ -63,7 +62,7 @@
             z-index: 3; pointer-events: none;
         }
 
-        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) - GIỮ NGUYÊN --- */
+        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -101,104 +100,120 @@
         }
         #start-button:hover { background: #00f7ff; color: #000; box-shadow: 0 0 40px #00f7ff; }
 
-        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - THAY ĐỔI LỚN --- */
+        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - ĐÃ PHÓNG TO --- */
         #main-app { display: none; width: 100%; display: flex; justify-content: center; } 
         
         .logo-quan-doi-goc {
-            position: fixed; top: 20px; left: 20px; width: 60px; height: auto; z-index: 100;
+            position: fixed; top: 20px; left: 20px; width: 70px; height: auto; z-index: 100;
             filter: drop-shadow(0 0 5px #00f7ff); display: none; 
         }
 
-        /* --- CẬP NHẬT CONTAINER DÙNG ẢNH KHUNG HUD --- */
+        /* --- CONTAINER KHỔNG LỒ --- */
         .container {
-            /* Dùng ảnh khung viền HUD làm nền */
             background-image: url('/hud-frame.png'); 
-            background-size: 100% 100%; /* Kéo giãn ảnh cho vừa khung */
+            background-size: 100% 100%; 
             background-repeat: no-repeat;
-            background-color: transparent; /* Nền trong suốt để thấy background động phía sau */
+            background-color: transparent; 
             
-            /* Xóa viền CSS cũ vì đã có viền ảnh */
-            border: none; 
-            box-shadow: none;
+            border: none; box-shadow: none;
             
-            /* Căn chỉnh nội dung vào giữa khung */
-            padding: 60px 50px; /* Padding lớn để tránh đè lên viền ảnh */
-            width: 90%; max-width: 650px;
-            margin-top: 20px;
+            /* THAY ĐỔI Ở ĐÂY: Kích thước lớn hơn */
+            width: 95%; /* Chiếm 95% màn hình */
+            max-width: 1400px; /* Giới hạn tối đa rất rộng */
+            min-height: 700px; /* Chiều cao tối thiểu lớn */
+            
+            /* Căn giữa và khoảng cách */
+            margin-top: 40px;
+            padding: 90px 110px; /* Padding lớn để nội dung lọt vào giữa khung to */
+            
             position: relative; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; /* Căn nội dung giữa khung */
         }
 
-        h2 { text-align: center; color: #00f7ff; margin-bottom: 25px; text-shadow: 0 0 10px rgba(0,247,255,0.5); }
+        h2 { 
+            text-align: center; color: #00f7ff; margin-bottom: 30px; 
+            font-size: 2.2em; /* Chữ to hơn */
+            text-shadow: 0 0 15px rgba(0,247,255,0.6); 
+            text-transform: uppercase; letter-spacing: 3px;
+        }
 
-        .tab-buttons { display: flex; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 247, 255, 0.3); }
+        .tab-buttons { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 247, 255, 0.3); }
         .tab-button {
-            flex: 1; padding: 12px; background: transparent; border: none;
-            color: #555; font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+            flex: 1; padding: 15px; background: transparent; border: none;
+            color: #555; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.1em;
             cursor: pointer; transition: 0.3s;
         }
-        .tab-button.active { color: #00f7ff; border-bottom: 2px solid #00f7ff; text-shadow: 0 0 5px #00f7ff; }
+        .tab-button.active { color: #00f7ff; border-bottom: 3px solid #00f7ff; text-shadow: 0 0 8px #00f7ff; }
         
-        .tab-content { display: none; }
+        .tab-content { display: none; width: 100%; }
         .tab-content.active { display: block; }
 
         textarea {
-            width: 100%; height: 150px; padding: 15px; 
-            background: rgba(0, 10, 20, 0.6); /* Nền tối nhẹ cho ô nhập liệu */
+            width: 100%; 
+            height: 300px; /* Ô nhập liệu CAO hơn nhiều */
+            padding: 20px; 
+            background: rgba(0, 10, 20, 0.6); 
             border: 1px solid #004455; color: #00f7ff;
             font-family: 'Chakra Petch', sans-serif; resize: vertical; box-sizing: border-box;
-            font-size: 16px; border-radius: 5px;
+            font-size: 18px; /* Chữ to hơn */
+            border-radius: 5px;
+            line-height: 1.5;
         }
-        textarea:focus { outline: none; border-color: #00f7ff; }
+        textarea:focus { outline: none; border-color: #00f7ff; box-shadow: 0 0 15px rgba(0,247,255,0.2); }
 
         #file-input { display: none; }
         .file-label {
-            display: block; padding: 20px; text-align: center; border: 1px dashed #004455;
+            display: block; padding: 40px; text-align: center; border: 2px dashed #004455;
             background: rgba(0,247,255,0.05); color: #00f7ff; cursor: pointer; transition: 0.3s;
+            font-size: 1.2em;
         }
         .file-label:hover { background: rgba(0,247,255,0.15); border-color: #00f7ff; }
-        #file-name { text-align: center; color: #aaa; margin-top: 10px; font-style: italic; }
+        #file-name { text-align: center; color: #aaa; margin-top: 15px; font-style: italic; font-size: 1.1em; }
 
-        .control-group { margin: 20px 0; }
-        label { display: block; color: #00f7ff; margin-bottom: 10px; font-weight: 700; }
+        .control-group { margin: 25px 0; }
+        label { display: block; color: #00f7ff; margin-bottom: 12px; font-weight: 700; font-size: 1.1em; }
         
         select {
-            width: 100%; padding: 12px; background: rgba(0, 10, 20, 0.8); border: 1px solid #004455;
-            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none; font-size: 16px; border-radius: 5px;
+            width: 100%; padding: 15px; background: rgba(0, 10, 20, 0.8); border: 1px solid #004455;
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; outline: none; font-size: 18px; border-radius: 5px;
         }
         
-        input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; }
+        input[type="range"] { width: 100%; accent-color: #00f7ff; cursor: pointer; height: 8px; }
 
         #speak-btn {
-            width: 100%; padding: 15px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.2);
-            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.2em;
-            cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(0,247,255,0.2);
-            text-transform: uppercase; margin-top: 10px;
+            width: 100%; padding: 20px; border: 1px solid #00f7ff; background: rgba(0, 247, 255, 0.2);
+            color: #00f7ff; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 1.5em; /* Nút to hơn */
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(0,247,255,0.3);
+            text-transform: uppercase; margin-top: 20px; letter-spacing: 2px;
         }
-        #speak-btn:hover { background: #00f7ff; color: #000; box-shadow: 0 0 20px #00f7ff; }
+        #speak-btn:hover { background: #00f7ff; color: #000; box-shadow: 0 0 30px #00f7ff; }
         #speak-btn:disabled { background: #333; color: #555; cursor: not-allowed; box-shadow: none; border-color: #555; }
 
-        .status { text-align: center; color: #aaa; margin-top: 15px; min-height: 1.2em; }
+        .status { text-align: center; color: #aaa; margin-top: 20px; min-height: 1.5em; font-size: 1.1em; }
         
-        audio { width: 100%; margin-top: 20px; filter: invert(1) hue-rotate(180deg); }
+        audio { width: 100%; margin-top: 25px; filter: invert(1) hue-rotate(180deg); height: 40px; }
         
         .download-button {
-            display: block; width: 100%; text-align: center; padding: 12px;
+            display: block; width: 100%; text-align: center; padding: 15px;
             border: 1px solid #ff00ff; color: #ff00ff; text-decoration: none;
-            margin-top: 15px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
-            background: rgba(255, 0, 255, 0.1);
+            margin-top: 20px; font-weight: 700; transition: 0.3s; box-sizing: border-box;
+            background: rgba(255, 0, 255, 0.1); font-size: 1.2em;
         }
-        .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 20px #ff00ff; }
+        .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 25px #ff00ff; }
 
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
+        /* Mobile Responsive: Tự động thu nhỏ nếu màn hình bé */
+        @media (max-width: 800px) {
             .container { 
-                padding: 40px 20px; /* Giảm padding trên mobile */
+                padding: 60px 40px; 
                 width: 95%; 
-                background-image: none; /* Mobile có thể bỏ khung nếu bị vỡ, hoặc giữ nguyên */
-                border: 1px solid #00f7ff; /* Fallback border cho mobile */
+                background-image: none; /* Mobile thì bỏ hình nền khung đi cho đỡ vỡ */
+                border: 2px solid #00f7ff; /* Thay bằng viền thường */
+                box-shadow: 0 0 20px rgba(0,247,255,0.3);
+                background-color: rgba(0, 10, 20, 0.9);
             }
             #splash-screen h1 { font-size: 1.8em; }
             .splash-logo { width: 100px; height: 100px; }
+            textarea { height: 150px; }
         }
     </style>
 </head>
@@ -231,11 +246,11 @@
             </div>
 
             <div id="text-tab" class="tab-content active">
-                <textarea id="text-input" placeholder="Nhập nội dung cần đọc..."></textarea>
+                <textarea id="text-input" placeholder="Nhập nội dung cần đọc vào đây..."></textarea>
             </div>
 
             <div id="upload-tab" class="tab-content">
-                <label for="file-input" class="file-label" id="file-label">CHỌN FILE .DOCX</label>
+                <label for="file-input" class="file-label" id="file-label">NHẤN ĐỂ CHỌN FILE .DOCX</label>
                 <input type="file" id="file-input" accept=".docx">
                 <p id="file-name">Chưa chọn file nào.</p>
             </div>
@@ -288,11 +303,11 @@
 
         // Xử lý nút Bắt Đầu
         startButton.addEventListener('click', () => {
-            splash.style.opacity = '0'; // Làm mờ màn hình chào
+            splash.style.opacity = '0'; 
             setTimeout(() => { 
-                splash.style.display = 'none'; // Ẩn hẳn
-                mainApp.style.display = 'flex'; // Hiện app chính
-                mainLogo.style.display = 'block'; // Hiện logo góc trái
+                splash.style.display = 'none'; 
+                mainApp.style.display = 'flex'; 
+                mainLogo.style.display = 'block'; 
             }, 800); 
         });
 
