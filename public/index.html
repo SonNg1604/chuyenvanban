@@ -62,13 +62,12 @@
             z-index: 3; pointer-events: none;
         }
 
-        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) - ĐÃ SỬA LỖI MỜ --- */
+        /* --- 3. MÀN HÌNH CHÀO (SPLASH SCREEN) --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             flex-direction: column; text-align: center;
             z-index: 1000; opacity: 1; transition: opacity 0.8s ease-out;
-            /* ĐÃ XÓA backdrop-filter: blur(5px); để không bị mờ hình nền */
         }
 
         .splash-logo {
@@ -100,8 +99,8 @@
         }
         #start-button:hover { background: #00f7ff; color: #000; box-shadow: 0 0 40px #00f7ff; }
 
-        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) - CẤU TRÚC MỚI --- */
-        #main-app { display: none; width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; } 
+        /* --- 4. GIAO DIỆN CHÍNH (MAIN APP) --- */
+        #main-app { display: none; width: 100%; width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; } 
         
         .logo-quan-doi-goc {
             position: fixed; top: 20px; left: 20px; width: 70px; height: auto; z-index: 100;
@@ -115,26 +114,22 @@
             background-repeat: no-repeat;
             background-position: center;
             
-            width: 95%; /* Rộng gần hết màn hình */
-            max-width: 1200px; /* Giới hạn độ rộng tối đa */
-            min-height: 750px; /* Chiều cao tối thiểu để khung trông to */
+            width: 95%; 
+            max-width: 1200px; 
+            min-height: 750px; 
             
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             position: relative; z-index: 10;
-            padding: 50px; /* Khoảng cách từ viền ảnh vào nội dung bên trong */
+            padding: 50px; 
             box-sizing: border-box;
         }
 
-        /* --- CONTAINER NỘI DUNG BÊN TRONG (KÍCH THƯỚC CŨ) --- */
+        /* --- CONTAINER NỘI DUNG BÊN TRONG --- */
         .container {
-            background-color: rgba(10, 20, 30, 0.85); /* Nền tối bán trong suốt */
-            padding: 30px; 
-            border-radius: 5px; 
-            width: 100%; 
-            max-width: 600px; /* Giới hạn kích thước nhỏ gọn như cũ */
-            border: 1px solid #00f7ff; /* Viền neon cho hộp nội dung */
+            background-color: rgba(10, 20, 30, 0.85); 
+            padding: 30px; border-radius: 5px; 
+            width: 100%; max-width: 600px; 
+            border: 1px solid #00f7ff; 
             box-shadow: 0 0 20px rgba(0, 247, 255, 0.1), inset 0 0 20px rgba(0, 247, 255, 0.05);
             backdrop-filter: blur(10px);
         }
@@ -201,17 +196,9 @@
         }
         .download-button:hover { background: #ff00ff; color: #000; box-shadow: 0 0 25px #ff00ff; }
 
-        /* Mobile Responsive */
         @media (max-width: 800px) {
-            .hud-wrapper {
-                background-image: none; /* Mobile bỏ ảnh khung lớn đi cho đỡ vỡ */
-                padding: 20px;
-                min-height: auto;
-            }
-            .container { 
-                width: 100%; 
-                border: 2px solid #00f7ff;
-            }
+            .hud-wrapper { background-image: none; padding: 20px; min-height: auto; }
+            .container { width: 100%; border: 2px solid #00f7ff; }
             #splash-screen h1 { font-size: 1.8em; }
             .splash-logo { width: 100px; height: 100px; }
         }
@@ -259,13 +246,15 @@
                 <div class="control-group">
                     <label for="voice-select">CHỌN GIỌNG ĐỌC:</label>
                     <select id="voice-select">
-                        <optgroup label="FPT.AI (Tiếng Việt Chuẩn)">
-                            <option value="banmai">👩 Ban Mai (Nữ Bắc)</option>
-                            <option value="leminh">👨 Lê Minh (Nam Bắc)</option>
-                            <option value="myan">👩 Mỹ An (Nữ Nam)</option>
-                            <option value="ngoclam">👩 Ngọc Lam (Nữ Huế)</option>
-                        </optgroup>
-                        <option value="google-vi">🤖 Google (Dự phòng)</option>
+                        <option value="google-vi">Giọng Google</option>
+                        <option value="banmai">Nữ miền Bắc - 1</option>
+                        <option value="thuminh">Nữ miền Bắc - 2</option>
+                        <option value="leminh">👨 Nam miền Bắc </option>
+                        <option value="myan">👩 Nữ miền Nam - 1 </option>
+                        <option value="lannhi">👩 Nữ miền Nam - 2</option>
+                        <option value="minhquang">👨 Nam miền Nam </option>
+                        <option value="ngoclam">👩 Nữ miền Trung </option>
+                        <option value="giahuy">👨 Nam miền Nam </option>
                     </select>
                 </div>
 
@@ -284,7 +273,6 @@
     </div>
 
     <script>
-        // --- LOGIC JS (Không đổi) ---
         const splash = document.getElementById('splash-screen');
         const mainApp = document.getElementById('main-app');
         const startButton = document.getElementById('start-button');
